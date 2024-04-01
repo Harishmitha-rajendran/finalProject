@@ -1,15 +1,16 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import './Login.css'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './Login.css';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
-
-  const login = async(e) => {
+  const login = async (e) => {
     e.preventDefault();
     
     try {
@@ -17,26 +18,29 @@ const Login = () => {
         email,
         password
       });
-      // If login is successful, redirect to admin component
-      if (response.status==200) {
-        // Navigate to admin component (replace with your routing logic)
-        console.log(response.data)
+      
+      if (response.data.success) {
+        toast.success(response.data.message);
+        // Redirect to the admin component or do any other action
       } else {
-        console.log("wasted");
+        toast.error(response.data.message);
       }
-
     } catch (error) {
-      console.error("Error:", error);
+      if (error.response && error.response.status === 404) {
+        toast.error("User not found");
+      } else if (error.response && error.response.status === 401) {
+        toast.error("Invalid password");
+      } else {
+        console.error("Error:", error);
+      }
     }
-
   }
 
   return (
     <div className='container'>
-      
-      <form className='form' method='POST' onSubmit={(e)=>login(e)}>
+      <form className='form' method='POST' onSubmit={(e) => login(e)}>
         <h1>Login</h1>
-         <input
+        <input
           value={email}
           placeholder="Enter your email here"
           onChange={(event) => setEmail(event.target.value)}
@@ -53,9 +57,9 @@ const Login = () => {
         <p onClick={() => {navigate("/ForgotPassword")}}>Forgot Password ? </p>
         <button className='submitButton' type="submit" >Login</button>
       </form>
-
+      <ToastContainer />
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

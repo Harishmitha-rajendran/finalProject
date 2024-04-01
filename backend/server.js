@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json()); // Parse JSON bodies
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, socketTimeoutMS: 30000,connectTimeoutMS: 30000})
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Error connecting to MongoDB:', err));
 
@@ -34,31 +35,81 @@ const UserDetails = mongoose.model('UserDetails', userDetailsSchema);
 // })
 
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-  
-    try {
-      // Find user by email in the database
-      const user = await UserDetails.findOne({ email });
-      console.log(user)
-      // Check if user exists and password matches
-      if (user) {
-          // Check if the password matches
-          if (user.password === password) {
-            console.log("jolly")
-              res.json({ success: true, message: 'Login successful' });
-          } else {
-              res.json({ success: false, message: 'Invalid password' });
-              console.log("galli")
-          }
-      } else {
-          // User not found
-          res.status(401).json({ success: false, message: 'Invalid email ' });
-      }
+  const { email, password } = req.body;
+
+  try {
+    // Find user by email in the database
+    const user = await UserDetails.findOne({ email });
+
+    if (!user) {
+      // User not found, send 404 status code
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    if (user.password === password) {
+      // Password matches, login successful
+      return res.json({ success: true, message: 'Login successful' });
+    } else {
+      // Password doesn't match, send 401 status code
+      return res.status(401).json({ success: false, message: 'Invalid password' });
+    }
   } catch (error) {
-      console.error('Error:', error);
-      res.status(500).json({ success: false, message: 'Internal server error' });
+    console.error('Error:', error);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
   }
-  });
+});
+
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     user: process.env.EMAIL_USER,
+//     pass: process.env.EMAIL_PASS
+//   }
+// });
+
+app.post('/sendVerificationMail', async (req, res) => {
+  const { email } = req.body;
+ console.log('called')
+  try {
+    const user = await UserDetails.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+      console.log('not fnd')
+    }
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Password Reset',
+      text: 'Click the following link to reset your password: http://localhost:3000/resetPassword'
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log('sending mail')
+    res.status(200).json({ success: true, message: 'Verification mail sent successfully' });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+app.post('/resetPassword', async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  try {
+    const user = await UserDetails.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    user.password = newPassword;
+    await user.save();
+    res.status(200).json({ success: true, message: 'Password reset successfully' });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
 
 // Start the server
 const PORT = process.env.PORT || 3000;
