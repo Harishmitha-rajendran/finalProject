@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import '../../index.css'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -38,7 +39,7 @@ const Login = () => {
 
   return (
     <div className='container'>
-      <form className='form' method='POST' onSubmit={(e) => login(e)}>
+      <form className='form'  onSubmit={(e) => login(e)}>
         <h1>Login</h1>
         <input
           value={email}
@@ -54,8 +55,10 @@ const Login = () => {
           className='inputBox'
           required
         />
-        <p onClick={() => {navigate("/ForgotPassword")}}>Forgot Password ? </p>
+        
         <button className='submitButton' type="submit" >Login</button>
+        <button className='submitButton' type='button' onClick={() => {navigate("/ForgotPassword")}}>Forgot Password ? </button>
+        
       </form>
       <ToastContainer />
     </div>

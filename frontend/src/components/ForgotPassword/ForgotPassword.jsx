@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
 import '../Login/Login.css'
+import '../../index.css'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
 
   const sendVerificationMail = async (e) => {
     e.preventDefault()

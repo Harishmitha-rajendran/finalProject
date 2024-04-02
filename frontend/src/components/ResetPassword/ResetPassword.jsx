@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../../index.css'
+import '../Login/Login.css'
 import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -34,6 +36,7 @@ const ResetPassword = () => {
     <div className='container'>
       <form className='form'>
         <input 
+          className='inputBox'
           type="password" 
           value={newPassword} 
           onChange={(e) => setNewPassword(e.target.value)} 
@@ -41,13 +44,18 @@ const ResetPassword = () => {
           required 
         />
         <input 
+         className='inputBox'
           type="password" 
           value={confirmPassword} 
           onChange={(e) => setConfirmPassword(e.target.value)} 
           placeholder="Confirm password" 
           required 
         />
-        <button onClick={(e) => resetPassword(e)}>Reset Password</button>
+        <button 
+        className='submitButton'
+        onClick={(e) => resetPassword(e)}>
+        Reset Password
+        </button>
       </form>
       <ToastContainer />
     </div>

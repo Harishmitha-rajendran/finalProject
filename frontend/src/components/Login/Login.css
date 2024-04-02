@@ -12,22 +12,34 @@
     align-items: center;
     justify-content: center;
     gap:10px;
+    backdrop-filter: blur(2px) saturate(177%);
+    -webkit-backdrop-filter: blur(2px) saturate(177%);
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(209, 213, 219, 0.3);
+    padding:5rem;
   }
   
   .inputBox {
-    height: 48px;
-    width: 400px;
-    font-size: large;
+    height: 40px;
+    width: 350px;
+    font-size: medium;
+    color:black;
     border-radius: 8px;
-    border: 1px solid grey;
+    border: none;
+    outline:none;
     padding-left: 8px;
   }
   .submitButton{
+    height: 40px;
+    width: 350px;
     border: none;
   background: cornflowerblue;
   color: white;
   padding: 12px 24px;
-  font-size: 24px;
+  font-size: medium;
+  font-weight:bold;
   border-radius: 8px;
   cursor: pointer;
   }
+

@@ -1,31 +1,3 @@
-// //server.js
-
-// const express = require('express');
-// const cors = require('cors');
-// const mongoose = require('mongoose');
-// require('dotenv').config();
-// const userRoutes = require('./Routes/userRoutes');
-
-// const app = express();
-
-// app.use(cors({ origin: 'http://localhost:5173' }));
-// app.use(express.json());
-
-// mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true ,socketTimeoutMS: 30000,connectTimeoutMS: 30000})
-//   .then(() => console.log('Connected to MongoDB'))
-//   .catch(err => console.error('Error connecting to MongoDB:', err));
-
-// app.use('/api/users', userRoutes);
-
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//   console.log(`Server is running on http://localhost:${PORT}`);
-// });
-
-
-
-
-
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -68,14 +40,15 @@ app.post('/login', async (req, res) => {
   try {
     // Find user by email in the database
     const user = await UserDetails.findOne({ email });
-
+    console.log(user)
     if (!user) {
       // User not found, send 404 status code
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
     if (user.password === password) {
-      // Password matches, login successful
+      console.log(user.password,password)
+      console.log('Password matches, login successful')
       return res.json({ success: true, message: 'Login successful' });
     } else {
       // Password doesn't match, send 401 status code
