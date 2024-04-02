@@ -1,10 +1,13 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useState } from 'react';
 import AddEvent from '../AddEvent/AddEvent';
 import CreateUser from '../CreateUser/CreateUser'
+import '../../index.css'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Events from '../Events/Events'
 
 function Admin() {
 
@@ -34,9 +37,14 @@ function Admin() {
       </Container>
     </Navbar>
 
+    <Events/>
+
+
+
     {showAddEvent && <AddEvent handleClose={toggleAddEvent} />}
     {showCreateUser && <CreateUser handleClose={toggleCreateUser} />}
-
+    
+    <ToastContainer/>
     </div>
   );
 }

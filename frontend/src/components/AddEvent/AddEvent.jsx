@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import './AddEvent.css';
-import { toast, ToastContainer } from 'react-toastify'; 
+import { ToastContainer, toast} from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import PropTypes from 'prop-types'; // Import PropTypes
 
 function AddEvent( { handleClose } ) {
   // const [show, setShow] = useState(false);
@@ -34,8 +35,8 @@ function AddEvent( { handleClose } ) {
   const handleSave = async () => {
       try {
         await axios.post('http://localhost:3000/addEvent', formData);
-        handleClose();
         toast.success('Event details saved successfully'); 
+        handleClose();
         // Clear the form data
       setFormData({
       eventName: '',
@@ -178,5 +179,10 @@ function AddEvent( { handleClose } ) {
     </>
   );
 }
+
+// Add prop validation
+AddEvent.propTypes = {
+  handleClose: PropTypes.func.isRequired // Ensure handleClose is a function and is required
+};
 
 export default AddEvent;

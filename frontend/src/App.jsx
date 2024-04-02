@@ -20,12 +20,12 @@ function App() {
     <BrowserRouter>
      <Routes>
       <Route path="/" element={<Login />}/>
-      {/* <Route path="/admin" element={<Admin />}/> */}
       <Route path="/ForgotPassword" element={<ForgotPassword />}/>
       <Route path="/ResetPassword/:email" element={<ResetPassword />} />
       <Route path="/CreateUser" element={<CreateUser />} />
       <Route path="/AddEvent" element={<AddEvent />} />
       <Route path="/Admin" element={<Admin />} />
+      
     </Routes>
     </BrowserRouter>
         

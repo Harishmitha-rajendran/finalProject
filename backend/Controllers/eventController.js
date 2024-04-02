@@ -21,6 +21,20 @@ const addEvent = async (req, res) => {
   }
 };
 
+
+
+// Controller function to fetch all events
+const getAllEvents = async (req, res) => {
+  try {
+    const events = await EventDetails.find();
+    res.json(events);
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
-  addEvent
+  addEvent,
+  getAllEvents
 };

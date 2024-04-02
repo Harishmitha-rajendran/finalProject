@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Modal, Form, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types'; // Import PropTypes
 
 const CreateUser = ({ handleClose }) => {
 
@@ -29,7 +30,7 @@ const CreateUser = ({ handleClose }) => {
     e.preventDefault();
     try {
         // Send user data to the server to create a new user
-        const response = await axios.post('http://localhost:3000/createUser', userData);
+        await axios.post('http://localhost:3000/createUser', userData);
         handleClose();
         toast.success('User created successfully. Kindly check your mail');
         // Clear the form fields after successful submission
@@ -50,7 +51,7 @@ const CreateUser = ({ handleClose }) => {
 
 
   return (
-    <Modal show={true} onHide={handleClose}>
+    <Modal show={true} onHide={handleClose} backdrop="static" keyboard={false}>
     <Modal.Header closeButton>
       <Modal.Title>Create User</Modal.Title>
     </Modal.Header>
@@ -107,6 +108,11 @@ const CreateUser = ({ handleClose }) => {
         </Modal.Footer>
   </Modal>
   );
+};
+
+// Add prop validation
+CreateUser.propTypes = {
+  handleClose: PropTypes.func.isRequired // Ensure handleClose is a function and is required
 };
 
 export default CreateUser;
