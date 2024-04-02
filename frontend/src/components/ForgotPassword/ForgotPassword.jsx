@@ -19,7 +19,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className='container'>
+    <div className='container-bg container-fluid '>
          <form className='form'>
          <input
           value={email}

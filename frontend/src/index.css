@@ -19,7 +19,7 @@
     margin:0;
     padding:0;
   }
-  .container{
+  .container-bg{
     background-image: url('../src/assets/bg.jpg');
     background-size: cover; 
     background-position: center;

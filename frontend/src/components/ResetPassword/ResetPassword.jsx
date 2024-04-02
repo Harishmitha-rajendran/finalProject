@@ -33,7 +33,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className='container'>
+    <div className='container-bg container-fluid'>
       <form className='form'>
         <input 
           className='inputBox'

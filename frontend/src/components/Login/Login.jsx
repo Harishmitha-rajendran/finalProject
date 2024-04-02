@@ -38,7 +38,7 @@ const Login = () => {
   }
 
   return (
-    <div className='container'>
+    <div className='container-bg container-fluid'>
       <form className='form'  onSubmit={(e) => login(e)}>
         <h1>Login</h1>
         <input

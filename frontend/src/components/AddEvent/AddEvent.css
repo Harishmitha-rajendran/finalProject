@@ -1,0 +1,33 @@
+/* AddEvent.css */
+.modal-dialog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    width: 40%; 
+  }
+  
+  .form-control{
+    width: calc(100% - 22px); /* Subtracting padding and border */
+    font-size: 14px; /* Adjust font size */
+    padding: 8px; /* Adjust padding */
+    border: 1px solid #ced4da; /* Grey border */
+    border-radius: 5px;
+    outline: none; /* Remove outline */
+    height: 32px; /* Adjust height */
+    margin-bottom: 10px;
+  }
+  
+ .form-control:focus {
+    border-color: #80bdff; /* Blue border when focused */
+  }
+  
+  .modal-footer button {
+    font-size: 16px;
+    padding: 10px 20px;
+  }
+.col{
+    display:flex;
+}
