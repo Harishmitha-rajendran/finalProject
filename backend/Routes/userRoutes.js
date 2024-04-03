@@ -8,5 +8,6 @@ router.post('/createUser', userController.createUser);
 router.post('/resetPassword', userController.resetPassword);
 router.post('/addEvent', eventController.addEvent);
 router.get('/events', eventController.getAllEvents);
+router.put('/events/:id', eventController.updateEvent);
 
 module.exports = router;

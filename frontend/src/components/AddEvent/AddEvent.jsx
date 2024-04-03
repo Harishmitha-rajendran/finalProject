@@ -17,7 +17,8 @@ function AddEvent( { handleClose } ) {
     endTime: '',
     location: '',
     trainer: '',
-    prerequisites: ''
+    prerequisites: '',
+    capacity:'',
   });
 
   // const handleClose = () => setShow(false);
@@ -37,6 +38,7 @@ function AddEvent( { handleClose } ) {
         await axios.post('http://localhost:3000/addEvent', formData);
         toast.success('Event details saved successfully'); 
         handleClose();
+        
         // Clear the form data
       setFormData({
       eventName: '',
@@ -48,10 +50,14 @@ function AddEvent( { handleClose } ) {
       location: '',
       trainer: '',
       prerequisites: ''})
+
+
       } catch (error) {
         console.error('Error saving event details:', error);
         toast.error('Error saving event details'); 
       }
+
+
     };
 
 
@@ -164,6 +170,17 @@ function AddEvent( { handleClose } ) {
                 placeholder="Enter event prerequisites"
               />
             </Form.Group>
+            <Form.Group controlId="capacity">
+  <Form.Label>Capacity</Form.Label>
+  <Form.Control
+    name="capacity"
+    type="number" // Change the type to "number"
+    value={formData.capacity} // Assuming formData.capacity holds the value for capacity
+    onChange={handleChange} // Assuming handleChange function handles changes in the form data
+    placeholder="Enter event capacity"
+  />
+</Form.Group>
+
           </Form>
         </Modal.Body>
         <Modal.Footer>

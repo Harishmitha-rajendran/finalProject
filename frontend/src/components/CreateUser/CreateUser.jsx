@@ -51,6 +51,7 @@ const CreateUser = ({ handleClose }) => {
 
 
   return (
+    
     <Modal show={true} onHide={handleClose} backdrop="static" keyboard={false}>
     <Modal.Header closeButton>
       <Modal.Title>Create User</Modal.Title>

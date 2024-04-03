@@ -41,7 +41,7 @@ function Admin() {
 
 
 
-    {showAddEvent && <AddEvent handleClose={toggleAddEvent} />}
+    {showAddEvent && <AddEvent  handleClose={toggleAddEvent} />}
     {showCreateUser && <CreateUser handleClose={toggleCreateUser} />}
     
     <ToastContainer/>

@@ -24,7 +24,25 @@ const eventDetailsSchema = new mongoose.Schema({
   },
   location: String,
   trainer: String,
-  prerequisites: String
+  prerequisites: String,
+  capacity:Number,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  editedAt: {
+    type: Date,
+    default: null
+  },
+  cancelledAt: {
+    type: Date,
+    default: null
+  },
+  status: {
+    type: String,
+    enum: ['completed', 'ongoing', 'upcoming', 'cancelled'],
+    default: 'upcoming'
+  }
 });
 
 const EventDetails = mongoose.model('EventDetails', eventDetailsSchema);

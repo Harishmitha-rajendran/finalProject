@@ -1,0 +1,12 @@
+.events-list {
+    max-height: calc(100vh - 100px); 
+    overflow-y: auto; 
+  }
+  .status{
+    color: red;
+  }
+  .disabled-card {
+    cursor: no-drop; /* Change cursor style to no-drop */
+    opacity: 0.6; /* Reduce opacity to visually indicate it's disabled */
+    pointer-events: none; /* Disable pointer events for the entire card */
+  }
