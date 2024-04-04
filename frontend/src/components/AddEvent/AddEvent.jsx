@@ -36,9 +36,8 @@ function AddEvent( { handleClose } ) {
   const handleSave = async () => {
       try {
         await axios.post('http://localhost:3000/addEvent', formData);
-        toast.success('Event details saved successfully'); 
         handleClose();
-        
+        toast.success('Event details saved successfully'); 
         // Clear the form data
       setFormData({
       eventName: '',
@@ -192,7 +191,7 @@ function AddEvent( { handleClose } ) {
           </Button>
         </Modal.Footer>
       </Modal>
-      <ToastContainer/>
+     
     </>
   );
 }

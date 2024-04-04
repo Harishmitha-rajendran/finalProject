@@ -94,6 +94,33 @@ exports.login = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
+
+exports.sendVerificationMail= async (req, res) => {
+    const { email } = req.body;
+  
+    try {
+      const user = await UserDetails.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+  
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Password Reset',
+        text: `Click the following link to reset your password: http://localhost:5173/ResetPassword/${email}`
+      };
+  
+      await transporter.sendMail(mailOptions);
+      res.status(200).json({ success: true, message: 'Verification mail sent successfully' });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  }
+  
+  
+  
   
 exports.resetPassword = async (req, res) => {
     const { email, newPassword } = req.body;

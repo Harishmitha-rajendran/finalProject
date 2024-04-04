@@ -26,6 +26,7 @@ const eventDetailsSchema = new mongoose.Schema({
   trainer: String,
   prerequisites: String,
   capacity:Number,
+  registrations:Number,
   createdAt: {
     type: Date,
     default: Date.now

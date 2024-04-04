@@ -134,6 +134,7 @@ function Events() {
                 <p className='card-text'>Trainer : {event.trainer} </p>
                 <p className='card-text'>Prerequisites: {event.prerequisites} </p>
                 <p className='card-text'>Capacity: {event.capacity} </p>
+                <p className='card-text'>Registrations: {event.registrations} </p>
                 <div className='d-flex justify-content-around mb-1'>
 
                   <button className={`btn btn-primary w-50 me-2 ${!(filter==='all') ? 'disabled-btn' : ''}`}  onClick={() => handleEdit(event)}>Edit</button>

@@ -9,7 +9,8 @@ const addEvent = async (req, res) => {
       createdAt: new Date(),
       editedAt: null,
       cancelledAt: null,
-      status: 'upcoming'
+      status: 'upcoming',
+      registrations:0
     };
     
     // Create a new event document
