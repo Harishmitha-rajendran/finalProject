@@ -94,8 +94,6 @@ exports.login = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
-
-
   
 exports.resetPassword = async (req, res) => {
     const { email, newPassword } = req.body;
@@ -119,3 +117,5 @@ exports.resetPassword = async (req, res) => {
       return res.status(500).json({ success: false, message: 'Internal server error' });
     }
   };
+
+  

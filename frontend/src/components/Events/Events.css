@@ -10,16 +10,11 @@
     opacity: 0.6; /* Reduce opacity to visually indicate it's disabled */
     pointer-events: none; /* Disable pointer events for the entire card */
   }
-  .filter-tab {
-    padding: 5px 10px;
+  span{
     cursor: pointer;
-    color: #aaa; /* Light text color */
-    text-decoration: none;
-    margin-right: 10px;
   }
-  
-  .filter-tab.active {
-    text-decoration: underline;
-    color: #333; /* Dark text color */
+  .disabled-btn{
+    cursor: no-drop; /* Change cursor style to no-drop */
+    opacity: 0.5; /* Reduce opacity to visually indicate it's disabled */
+    pointer-events: none; /* Disable pointer events for the entire card */
   }
-  

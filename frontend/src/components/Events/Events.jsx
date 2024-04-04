@@ -85,30 +85,42 @@ function Events() {
 
   const filteredEvents = filter === 'all' ? events.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) : events.filter(event => event.status === filter);
 
+  const eventCounts = {
+    'all': events.length,
+    'upcoming': events.filter(event => event.status === 'upcoming').length, // Corrected filter
+    'ongoing': events.filter(event => event.status === 'ongoing').length,
+    'completed': events.filter(event => event.status === 'completed').length,
+    'cancelled': events.filter(event => event.status === 'cancelled').length
+  };
+
   return (
     <div className="events-list row p-2">
-      <h2>Events</h2>
       <div className="filter-buttons row ">
         <div className="col-2">
         <span  className={`filter-tab ${filter === 'all' ? 'active' : ''}`} 
-        onClick={() => filterEvents('all')}>All</span>
+        onClick={() => filterEvents('all')}>All <span className='badg'>{eventCounts['all']}</span>
+        </span>
         </div>
         <div className="col-2">
-        <Button onClick={() => filterEvents('upcoming')} variant={filter === 'upcoming' ? 'primary' : 'light'}>Upcoming</Button>
+        <span  onClick={() => filterEvents('upcoming')} >Upcoming <span className='badg'>{eventCounts['upcoming']}</span>
+        </span >
         </div>
         <div className="col-2">
-        <Button onClick={() => filterEvents('ongoing')} variant={filter === 'ongoing' ? 'primary' : 'light'}>Ongoing</Button>
+        <span  onClick={() => filterEvents('ongoing')} >Ongoing <span className='badg'>{eventCounts['ongoing']}</span>
+        </span >
         </div>
         <div className="col-2">
-        <Button onClick={() => filterEvents('completed')} variant={filter === 'completed' ? 'primary' : 'light'}>Completed</Button>
+        <span  onClick={() => filterEvents('completed')} >Completed <span className='badg'>{eventCounts['completed']}</span>
+        </span >
         </div>
         <div className="col-2">
-        <Button onClick={() => filterEvents('cancelled')} variant={filter === 'cancelled' ? 'primary' : 'light'}>Cancelled</Button>
+        <span  onClick={() => filterEvents('cancelled')} >Cancelled <span className='badg'>{eventCounts['cancelled']}</span>
+        </span >
       </div>
     </div>
       <div className="events-cards row">
         {filteredEvents.map(event => (
-          <div key={event._id} className={`col-lg-3 col-md-6 ${event.status === 'completed' || event.status === 'cancelled' || event.status === 'ongoing' ? 'disabled-card' : ''}`}>
+          <div key={event._id} className={`col-lg-3 col-md-6 ${filter==='all' && (event.status === 'completed' || event.status === 'cancelled' || event.status === 'ongoing') ? 'disabled-card' : ''}`}>
             <div className="card my-3">
               <div className="card-body pb-1">
                 <div className='d-flex justify-content-between'>
@@ -123,8 +135,13 @@ function Events() {
                 <p className='card-text'>Prerequisites: {event.prerequisites} </p>
                 <p className='card-text'>Capacity: {event.capacity} </p>
                 <div className='d-flex justify-content-around mb-1'>
-                  <button className="btn btn-primary w-50 me-2" onClick={() => handleEdit(event)}>Edit</button>
-                  <button className="btn btn-primary w-50" onClick={() => handleCancelEvent(event)}>Cancel</button>
+
+                  <button className={`btn btn-primary w-50 me-2 ${!(filter==='all') ? 'disabled-btn' : ''}`}  onClick={() => handleEdit(event)}>Edit</button>
+                  <button  className={`btn btn-primary w-50  ${!(filter==='all') ? 'disabled-btn' : ''}`} onClick={() => handleCancelEvent(event)}>Cancel</button>
+
+                  {/* <button className={`btn btn-primary w-50 me-2 ${!(filter==='all') ? 'disabled-btn' : ''}`}  onClick={() => handleRegister(event)}>Register</button>
+                  <button  className={`btn btn-primary w-50  ${!(filter==='all') ? 'disabled-btn' : ''}`} onClick={() => handleLike(event)}>Like</button> */}
+
                 </div>
               </div>
             </div>

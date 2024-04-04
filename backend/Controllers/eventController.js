@@ -31,13 +31,13 @@ const addEvent = async (req, res) => {
 // Controller function to fetch all events
 const getAllEvents = async (req, res) => {
   try {
-    // Fetch all events from the database
+  
     const events = await EventDetails.find();
 
     // Iterate through the fetched events
     events.forEach(async (event) => {
-      const currentTime = new Date();
-
+      const currentTime = new Date()
+    
       const startDate = new Date(event.startDate);
       const startTime = event.startTime.split(':'); // Split the time string HH:mm
       startDate.setHours(startTime[0]); // Set hours from startTime
@@ -47,6 +47,8 @@ const getAllEvents = async (req, res) => {
       const endTime = event.endTime.split(':'); // Split the time string HH:mm
       endDate.setHours(endTime[0]); // Set hours from endTime
       endDate.setMinutes(endTime[1]); // Set minutes from endTime
+
+     
 
       // const localCurrentTime = new Date(currentTime.getTime() - currentTime.getTimezoneOffset() * 60000);
 
@@ -76,7 +78,6 @@ const updateEvent = async (req, res) => {
   try {
     const eventId = req.params.id;
     const eventDataToUpdate = req.body; // New event details from request body
-console.log(eventId,eventDataToUpdate)
     // Update the event details in the database
     const updatedEvent = await EventDetails.findByIdAndUpdate(eventId, eventDataToUpdate, { new: true });
 
