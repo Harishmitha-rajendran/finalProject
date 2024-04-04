@@ -51,13 +51,14 @@ const getAllEvents = async (req, res) => {
       // const localCurrentTime = new Date(currentTime.getTime() - currentTime.getTimezoneOffset() * 60000);
 
       // Update status based on current time and event start/end times
+      if(event.status!='cancelled'){
       if (currentTime < startDate) {
         event.status = 'upcoming';
       } else if (currentTime >= startDate && currentTime <= endDate) {
         event.status = 'ongoing';
       } else {
         event.status = 'completed';
-      }
+      }}
 
       // Save the updated event to the database
       await event.save();

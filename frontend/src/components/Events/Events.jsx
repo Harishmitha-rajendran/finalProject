@@ -9,14 +9,13 @@ function Events() {
   const [events, setEvents] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editedEvent, setEditedEvent] = useState({});
+  const [filter, setFilter] = useState('all'); // Default filter is 'all'
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    // Ensure the date is valid
     if (isNaN(date.getTime())) {
-      return ''; // Return empty string if date is invalid
+      return '';
     }
-    // Format the date in yyyy-MM-dd format
     const year = date.getFullYear();
     let month = '' + (date.getMonth() + 1);
     let day = '' + date.getDate();
@@ -27,108 +26,111 @@ function Events() {
     return [year, month, day].join('-');
   };
 
-  const fetchEvents = () => {
-    axios.get('http://localhost:3000/events')
-      .then(response => {
-        setEvents(response.data); // Set the fetched events in the state
-      })
-      .catch(error => {
-        console.error('Error fetching event data:', error);
-      });
+  const fetchEvents = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/events');
+      setEvents(response.data);
+    } catch (error) {
+      console.error('Error fetching event data:', error);
+    }
   };
 
   useEffect(() => {
     fetchEvents();
-  }, [events]); 
+  }, [events, filter]); // Include filter in dependency array
 
-  const handleEdit= (event) => {
+  const handleEdit = (event) => {
     setEditedEvent(event);
     setShowEditModal(true);
   };
 
-  const handleSaveEdit = async() => {
+  const handleSaveEdit = async () => {
     try {
-      // Make an HTTP request to update the event details
       await axios.put(`http://localhost:3000/events/${editedEvent._id}`, editedEvent);
-      
-      // Close the modal after successful update
       setShowEditModal(false);
-  
-      // Fetch events again to reflect the changes
+      toast.success('Data updated successfully');
       fetchEvents();
     } catch (error) {
-      console.error('Error saving edited event details:', error);
-      // Handle error accordingly, e.g., show error message
+      toast.error('Error saving edited event details');
     }
   };
 
-  const handleCancelEdit = (e) => {
-    // Cancel edit action, close the modal
+  const handleCancelEdit = () => {
     setShowEditModal(false);
   };
 
-  const handleEditChange=(e)=>{
+  const handleEditChange = (e) => {
     const { name, value } = e.target;
-  setEditedEvent({
-    ...editedEvent,
-    [name]: value,
-    editedAt: new Date()
-  });
-  }
-
+    setEditedEvent({
+      ...editedEvent,
+      [name]: value,
+      editedAt: new Date().toISOString()
+    });
+  };
 
   const handleCancelEvent = async (event) => {
     try {
-      setEditedEvent(event);
-
-      // Update the edited event's status to "cancelled" and set cancelledAt
-      const updatedEvent = {
-        ...editedEvent,
-        status: 'cancelled',
-        cancelledAt: new Date()
-      };
-      console.log(updatedEvent)
-      // Make an HTTP request to update the event details
-      await axios.put(`http://localhost:3000/events/${updatedEvent._id}`, updatedEvent);
-      toast.success('Event Cancelled')
-      // Fetch events again to reflect the changes
+      const updatedEvent = { ...event, status: 'cancelled', cancelledAt: new Date().toISOString() };
+      await axios.put(`http://localhost:3000/events/${event._id}`, updatedEvent);
+      toast.success('Event Cancelled');
       fetchEvents();
     } catch (error) {
       toast.error('Error cancelling event:', error);
     }
   };
-  
+
+  const filterEvents = (status) => {
+    setFilter(status);
+  };
+
+  const filteredEvents = filter === 'all' ? events.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) : events.filter(event => event.status === filter);
 
   return (
     <div className="events-list row p-2">
       <h2>Events</h2>
-{events
-  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort events based on createdAt
-  .map(event => (
-    <div key={event._id} className={`col-lg-3 col-md-6 ${event.status === 'completed' || event.status === 'cancelled' ? 'disabled-card' : ''}`}>
-      <div className="card my-2" >
-        <div className="card-body pb-1" >
-          <div className='d-flex justify-content-between '>
-            <h5 className="card-title">{event.eventName}</h5>
-            <p className='text-center p-0 m-0 status'>{event.status}</p>
-          </div>
-          <h6 className="card-subtitle mb-2 text-body-secondary">{event.description}</h6>
-          <p className="card-text"> Start Time : {new Date(event.startDate).toLocaleDateString()} : {event.startTime} </p>
-          <p className="card-text"> End Time : {new Date(event.endDate).toLocaleDateString()} : {event.endTime}</p>
-          <p className='card-text'>Location : {event.location} </p>
-          <p className='card-text'>Trainer : {event.trainer} </p>
-          <p className='card-text'>Prerequisites: {event.prerequisites} </p>
-          <p className='card-text'>Capacity: {event.capacity} </p>
-          <div className='d-flex justify-content-around mb-1'>
-            <button className="btn btn-primary w-50 me-2" onClick={() => handleEdit(event)}>Edit</button>
-            <button className="btn btn-primary w-50" onClick={()=> handleCancelEvent(event)}>Cancel</button>
-          </div>
+      <div className="filter-buttons row ">
+        <div className="col-2">
+        <span  className={`filter-tab ${filter === 'all' ? 'active' : ''}`} 
+        onClick={() => filterEvents('all')}>All</span>
         </div>
+        <div className="col-2">
+        <Button onClick={() => filterEvents('upcoming')} variant={filter === 'upcoming' ? 'primary' : 'light'}>Upcoming</Button>
+        </div>
+        <div className="col-2">
+        <Button onClick={() => filterEvents('ongoing')} variant={filter === 'ongoing' ? 'primary' : 'light'}>Ongoing</Button>
+        </div>
+        <div className="col-2">
+        <Button onClick={() => filterEvents('completed')} variant={filter === 'completed' ? 'primary' : 'light'}>Completed</Button>
+        </div>
+        <div className="col-2">
+        <Button onClick={() => filterEvents('cancelled')} variant={filter === 'cancelled' ? 'primary' : 'light'}>Cancelled</Button>
       </div>
     </div>
-  ))}
-
-
+      <div className="events-cards row">
+        {filteredEvents.map(event => (
+          <div key={event._id} className={`col-lg-3 col-md-6 ${event.status === 'completed' || event.status === 'cancelled' || event.status === 'ongoing' ? 'disabled-card' : ''}`}>
+            <div className="card my-3">
+              <div className="card-body pb-1">
+                <div className='d-flex justify-content-between'>
+                  <h5 className="card-title">{event.eventName}</h5>
+                  <p className='text-center p-0 m-0 status'>{event.status}</p>
+                </div>
+                <h6 className="card-subtitle mb-2 text-body-secondary mt-2 mb-3">{event.description}</h6>
+                <p className="card-text"> Start Time : {new Date(event.startDate).toLocaleDateString()} : {event.startTime} </p>
+                <p className="card-text"> End Time : {new Date(event.endDate).toLocaleDateString()} : {event.endTime}</p>
+                <p className='card-text'>Location : {event.location} </p>
+                <p className='card-text'>Trainer : {event.trainer} </p>
+                <p className='card-text'>Prerequisites: {event.prerequisites} </p>
+                <p className='card-text'>Capacity: {event.capacity} </p>
+                <div className='d-flex justify-content-around mb-1'>
+                  <button className="btn btn-primary w-50 me-2" onClick={() => handleEdit(event)}>Edit</button>
+                  <button className="btn btn-primary w-50" onClick={() => handleCancelEvent(event)}>Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
 {showEditModal && (
         <Modal
         show={true}
