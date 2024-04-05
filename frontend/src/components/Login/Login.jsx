@@ -21,8 +21,12 @@ const Login = () => {
       });
       
       if (response.data.success) {
+        const userId= response.data.userId;
+
+        // Store user data in localStorage
+        localStorage.setItem("userId", JSON.stringify(userId));
         toast.success(response.data.message);
-        // Redirect to the admin component or do any other action
+        navigate('/HomePage')
       } else {
         toast.error(response.data.message);
       }
@@ -36,6 +40,7 @@ const Login = () => {
       }
     }
   }
+  
 
   return (
     <div className='container-bg container-fluid'>
@@ -60,7 +65,7 @@ const Login = () => {
         <button className='submitButton' type='button' onClick={() => {navigate("/ForgotPassword")}}>Forgot Password ? </button>
         
       </form>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </div>
   );
 }

@@ -9,7 +9,7 @@ import  ForgotPassword  from './components/ForgotPassword/ForgotPassword'
 import  ResetPassword  from './components/ResetPassword/ResetPassword'
 import  CreateUser  from './components/CreateUser/CreateUser'
 import AddEvent  from './components/AddEvent/AddEvent'
-import Admin  from './components/Admin/Admin'
+import HomePage  from './components/HomePage/HomePage'
 import Calender from './components/Calender/Calender'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -25,7 +25,7 @@ function App() {
       <Route path="/ResetPassword/:email" element={<ResetPassword />} />
       <Route path="/CreateUser" element={<CreateUser />} />
       <Route path="/AddEvent" element={<AddEvent />} />
-      <Route path="/Admin" element={<Admin />} />
+      <Route path="/HomePage" element={<HomePage />} />
       <Route path="/Calender" element={<Calender />} />
       
     </Routes>

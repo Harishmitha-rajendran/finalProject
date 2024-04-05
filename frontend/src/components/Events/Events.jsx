@@ -9,7 +9,32 @@ function Events() {
   const [events, setEvents] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editedEvent, setEditedEvent] = useState({});
-  const [filter, setFilter] = useState('all'); // Default filter is 'all'
+  const [filter, setFilter] = useState('all'); 
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [userId,setUserId]=useState('')
+
+
+  useEffect(() => {
+    // Fetch user ID from localStorage
+    setUserId(localStorage.getItem('userId'))
+
+    // Make an HTTP request to the backend to check if the user is an admin
+    const checkAdminStatus = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3000/adminStatus/${userId}`);
+            setIsAdmin(response.data.isAdmin);
+        } catch (error) {
+            console.error('Error checking admin status:', error);
+        }
+    };
+
+    // Call the function to check admin status
+    if (userId) {
+        checkAdminStatus();
+    }
+
+}, []);
+
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -70,7 +95,7 @@ function Events() {
 
   const handleCancelEvent = async (event) => {
     try {
-      const updatedEvent = { ...event, status: 'cancelled', cancelledAt: new Date().toISOString() };
+      const updatedEvent = { ...event, status: 'cancelled', cancelledAt: new Date().toISOString()};
       await axios.put(`http://localhost:3000/events/${event._id}`, updatedEvent);
       toast.success('Event Cancelled');
       fetchEvents();
@@ -92,6 +117,24 @@ function Events() {
     'completed': events.filter(event => event.status === 'completed').length,
     'cancelled': events.filter(event => event.status === 'cancelled').length
   };
+
+
+  const handleRegister = async (event) => {
+    try {
+      const registrationData = {
+        event_id: event._id,
+        user_id: userId.replace(/^"(.*)"$/, '$1'),
+        registeredAt: new Date().toISOString()
+      };
+      console.log(registrationData)
+      await axios.post('http://localhost:3000/registrations', registrationData);
+      toast.success('Event Registered Successfully');
+      fetchEvents(); 
+    } catch (error) {
+      toast.error('Error registering for event');
+    }
+  };
+
 
   return (
     <div className="events-list row p-2">
@@ -137,11 +180,19 @@ function Events() {
                 <p className='card-text'>Registrations: {event.registrations} </p>
                 <div className='d-flex justify-content-around mb-1'>
 
-                  <button className={`btn btn-primary w-50 me-2 ${!(filter==='all') ? 'disabled-btn' : ''}`}  onClick={() => handleEdit(event)}>Edit</button>
-                  <button  className={`btn btn-primary w-50  ${!(filter==='all') ? 'disabled-btn' : ''}`} onClick={() => handleCancelEvent(event)}>Cancel</button>
-
-                  {/* <button className={`btn btn-primary w-50 me-2 ${!(filter==='all') ? 'disabled-btn' : ''}`}  onClick={() => handleRegister(event)}>Register</button>
-                  <button  className={`btn btn-primary w-50  ${!(filter==='all') ? 'disabled-btn' : ''}`} onClick={() => handleLike(event)}>Like</button> */}
+{ isAdmin ?
+            ( <>
+                  <button className={`btn btn-primary w-50 me-2 ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`}  onClick={() => handleEdit(event)}>Edit</button>
+                  <button  className={`btn btn-primary w-50  ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`} onClick={() => handleCancelEvent(event)}>Cancel</button>
+              </>
+            )
+            :
+            ( <>
+                  <button className={`btn btn-primary w-50 me-2 ${!(filter==='all' ) ? 'disabled-btn' : ''}`}  onClick={() => handleRegister(event)}>Register</button>
+                  <button  className={`btn btn-primary w-50  ${!(filter==='all') ? 'disabled-btn' : ''}`} onClick={() => handleLike(event)}>Like</button>
+              </>
+            )
+}
 
                 </div>
               </div>
@@ -149,6 +200,8 @@ function Events() {
           </div>
         ))}
       </div>
+
+
 {showEditModal && (
         <Modal
         show={true}
