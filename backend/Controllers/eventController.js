@@ -1,4 +1,15 @@
 const EventDetails = require('../Models/eventDetails');
+const UserDetails=require('../Models/userDetails');
+const RegistrationDetails=require('../Models/registrationDetails');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: '20bcs004@gmail.com', 
+    pass: 'tiin okwz ndcs iuog'   
+  }
+});
 
 // Controller function to handle adding a new event
 const addEvent = async (req, res) => {
@@ -18,6 +29,33 @@ const addEvent = async (req, res) => {
 
     // Save the new event to the database
     await newEvent.save();
+
+    // Fetch all users except those with role===admin
+    const usersToNotify = await UserDetails.find({ role: { $ne: 'admin' } });
+
+    // Send emails to users about the newly created event 
+    for (const user of usersToNotify) {
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: user.email,
+        subject: 'New Event Added',
+        text: `Dear ${user.userName},\n\n` +
+          `A new event has been added:\n\n` +
+          `Event Name: ${newEvent.name}\n` +
+          `Location: ${newEvent.location}\n` +
+          `Trainer: ${newEvent.trainer}\n` +
+          `Start Date: ${newEvent.startDate} : ${newEvent.startTime} \n` +
+          `End Date: ${newEvent.endDate} : ${newEvent.endTime}\n` +
+          `Prerequisites: ${newEvent.prerequisites}\n\n` +
+          `Please check for further details on the platform.\n\n` +
+          `Regards,\n` +
+          `Employee Learning Platform`
+      };
+
+      // Send notification email to the user
+      await transporter.sendMail(mailOptions);
+    }
+
 
     // Respond with a success message
     res.status(201).json({ message: 'Event created successfully', event: newEvent });
@@ -79,12 +117,52 @@ const updateEvent = async (req, res) => {
   try {
     const eventId = req.params.id;
     const eventDataToUpdate = req.body; // New event details from request body
+   
+    // Fetch the event details before updating
+    const existingEvent = await EventDetails.findById(eventId);
+
+    if (!existingEvent) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
     // Update the event details in the database
     const updatedEvent = await EventDetails.findByIdAndUpdate(eventId, eventDataToUpdate, { new: true });
 
     if (!updatedEvent) {
       return res.status(404).json({ message: 'Event not found' });
     }
+
+    // Fetch registrations for the specific event
+    const registrations = await RegistrationDetails.find({ event_id: eventId });
+
+    // Notify users about the update or cancellation
+    for (const registration of registrations) {
+      const user = await UserDetails.findById(registration.user_id);
+      if (user) {
+        const mailOptions = {
+          from: process.env.EMAIL_USER,
+          to: user.email,
+          subject: 'Event Update or Cancellation',
+          text: `Dear ${user.userName},\n\n` +
+            `The event "${existingEvent.eventName}" has been updated or cancelled.\n\n` +
+            `Details:\n` +
+            `Event Name: ${existingEvent.eventName}\n` +
+            `Location: ${existingEvent.location}\n` +
+            `Trainer: ${existingEvent.trainer}\n` +
+            `Start Date: ${existingEvent.startDate} : ${existingEvent.startTime} \n` +
+            `End Date: ${existingEvent.endDate} : ${existingEvent.endTime}\n` +
+            `Prerequisites: ${existingEvent.prerequisites}\n\n` +
+            `Status: ${existingEvent.status}\n\n` +
+            `Please check the updated details on the platform.\n\n` +
+            `Regards,\n` +
+            `Employee Learning Platform`
+        };
+
+        // Send notification email to the user
+        await transporter.sendMail(mailOptions);
+      }
+    }
+
 
     // Respond with the updated event details
     res.status(200).json({ message: 'Event updated successfully', event: updatedEvent });

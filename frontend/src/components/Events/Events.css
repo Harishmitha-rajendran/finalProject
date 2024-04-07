@@ -18,3 +18,6 @@
     opacity: 0.5; /* Reduce opacity to visually indicate it's disabled */
     pointer-events: none; /* Disable pointer events for the entire card */
   }
+.col-5{
+  width:20%;
+}

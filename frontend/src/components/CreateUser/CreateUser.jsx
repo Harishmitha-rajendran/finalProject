@@ -32,7 +32,7 @@ const CreateUser = ({ handleClose }) => {
         // Send user data to the server to create a new user
         await axios.post('http://localhost:3000/createUser', userData);
         handleClose();
-        toast.success('User created successfully. Kindly check your mail');
+        toast.success('User created successfully and email sent');
         // Clear the form fields after successful submission
         setUserData({
             userName: '',

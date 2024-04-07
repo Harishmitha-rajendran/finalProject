@@ -1,25 +1,18 @@
-// Import mongoose
 const mongoose = require('mongoose');
 
-// Define interestDetails schema
 const interestDetailsSchema = new mongoose.Schema({
-    event_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Event',
-        required: true
-    },
-    user_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    likedAt: {
-        type: Date
-    }
+  event_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Event', // Reference to the Event model
+    required: true
+  },
+  likes: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'User', // Reference to the User model
+    default: []
+  }
 });
 
-// Create interestDetails model
 const InterestDetails = mongoose.model('InterestDetails', interestDetailsSchema);
 
-// Export interestDetails model
 module.exports = InterestDetails;

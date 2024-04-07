@@ -1,27 +1,19 @@
-// Import the InterestDetails model
 const InterestDetails = require('../Models/interestDetails');
 
-// Controller function to create interest details
-exports.createInterestDetails = async (req, res) => {
-    try {
-        // Extract event_id, user_id from the request body
-        const { event_id, user_id } = req.body;
+exports.addLike = async (req, res) => {
+  try {
+    const { eventId, userId } = req.body;
 
-        // Create a new InterestDetails document
-        const interestDetails = new InterestDetails({
-            event_id,
-            user_id,
-            likedAt: Date.now() // Set likedAt to current date and time
-        });
+    // Update the interest details by adding the user ID to the array of likes
+    const updatedInterest = await InterestDetails.findOneAndUpdate(
+      { event_id: eventId },
+      { $addToSet: { likes: userId } }, // $addToSet ensures no duplicates in the array
+      { upsert: true, new: true }  // creates new document if not exists, returns updated document
+    );
 
-        // Save the interestDetails document to the database
-        await interestDetails.save();
-
-        // Respond with success message
-        res.status(201).json({ success: true, message: 'Interest details created successfully', interestDetails });
-    } catch (error) {
-        // Handle errors
-        console.error('Error creating interest details:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
-    }
+    res.status(200).json(updatedInterest);
+  } catch (error) {
+    console.error('Error adding like:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };

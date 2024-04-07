@@ -25,8 +25,8 @@ const Login = () => {
 
         // Store user data in localStorage
         localStorage.setItem("userId", JSON.stringify(userId));
-        toast.success(response.data.message);
         navigate('/HomePage')
+        toast.success(response.data.message);
       } else {
         toast.error(response.data.message);
       }
@@ -65,7 +65,7 @@ const Login = () => {
         <button className='submitButton' type='button' onClick={() => {navigate("/ForgotPassword")}}>Forgot Password ? </button>
         
       </form>
-      {/* <ToastContainer /> */}
+       <ToastContainer /> 
     </div>
   );
 }

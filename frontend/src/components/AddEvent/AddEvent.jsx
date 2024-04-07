@@ -34,8 +34,51 @@ function AddEvent( { handleClose } ) {
 
 
   const handleSave = async () => {
+
+    const startDate = new Date(formData.startDate);
+    const startTime = formData.startTime.split(':'); // Split time into hours and minutes
+    const startTimeHours = parseInt(startTime[0]);
+    const startTimeMinutes = parseInt(startTime[1]);
+
+    // Convert endDate and endTime to Date objects
+    const endDate = new Date(formData.endDate);
+    const endTime = formData.endTime.split(':'); // Split time into hours and minutes
+    const endTimeHours = parseInt(endTime[0]);
+    const endTimeMinutes = parseInt(endTime[1]);
+
+    // Get the current date/time
+    const currentDate = new Date();
+
+    // Create a new Date object for the startTime
+    const combinedStartDateTime = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), startTimeHours, startTimeMinutes);
+   
+    // Create a new Date object for the endTime
+    const combinedEndDateTime = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), endTimeHours, endTimeMinutes);
+
+    // Check if combinedEndDateTime is before combinedStartDateTime
+    if (combinedEndDateTime < combinedStartDateTime) {
+      toast.error('End date and time should be after start date and time');
+      return; // Don't proceed further if the end date and time are before the start date and time
+  }
+
+    // Check if combinedStartDateTime is in the past
+    if (combinedStartDateTime < currentDate) {
+        toast.error('Please select a future start date and time');
+        return; // Don't proceed further if the start date and time are in the past
+    }
+
+    // Check if combinedEndDateTime is in the past
+    if (combinedEndDateTime < currentDate) {
+        toast.error('Please select a future end date and time');
+        return; // Don't proceed further if the end date and time are in the past
+    }
+
+    
+ 
+
       try {
         await axios.post('http://localhost:3000/addEvent', formData);
+        console.log(formData)
         handleClose();
         toast.success('Event details saved successfully'); 
         // Clear the form data

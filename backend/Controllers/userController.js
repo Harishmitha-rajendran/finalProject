@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
 function generateRandomPassword() {
-    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=";
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let password = "";
   
     for (let i = 0; i < 8; i++) {
@@ -36,9 +36,12 @@ exports.login = async (req, res) => {
         return res.status(404).json({ success: false, message: 'User not found' });
       }
 
+      // console.log(password)
+      // const hashedPassword1 = await bcrypt.hash(password, 10);
+      // console.log(hashedPassword1)
       //const passwordMatch = await bcrypt.compare(password, user.password);
   
-      if (password==user.password) { // passwordMatch
+      if ( password==user.password) { //   password==user.password
         return res.json({ success: true, message: 'Login successful', userId: user._id });
 
       } else {
@@ -64,6 +67,7 @@ exports.login = async (req, res) => {
 
         // Hash the password using bcrypt
         const hashedPassword = await bcrypt.hash(newPassword, 10);
+        console.log(hashedPassword)
 
         // Create a new user with the hashed password
         const userData = {
@@ -76,7 +80,7 @@ exports.login = async (req, res) => {
         const newUser = await UserDetails.create(userData);
 
         const mailOptions = {
-            from: 'your-email@gmail.com',
+            from: process.env.EMAIL_USER,
             to: userData.email,
             subject: 'Welcome to Employee Learning Platform',
             html: `<p>Hello ${userData.userName},</p>

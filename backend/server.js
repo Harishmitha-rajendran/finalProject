@@ -12,7 +12,7 @@ app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json()); // Parse JSON bodies
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, socketTimeoutMS: 30000, connectTimeoutMS: 30000 })
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, socketTimeoutMS: 50000, connectTimeoutMS: 50000 })
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Error connecting to MongoDB:', err));
 

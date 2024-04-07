@@ -12,12 +12,14 @@ function Events() {
   const [filter, setFilter] = useState('all'); 
   const [isAdmin, setIsAdmin] = useState(false);
   const [userId,setUserId]=useState('')
-
+  const [userRegistrations, setUserRegistrations] = useState([]);
+  const [showRegisteredEvents,setShowRegisteredEvents]=useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResultEvents, setSearchResultEvents] = useState([]);
 
   useEffect(() => {
     // Fetch user ID from localStorage
     setUserId(localStorage.getItem('userId'))
-
     // Make an HTTP request to the backend to check if the user is an admin
     const checkAdminStatus = async () => {
         try {
@@ -33,7 +35,7 @@ function Events() {
         checkAdminStatus();
     }
 
-}, []);
+}, [userId]);
 
 
   const formatDate = (dateString) => {
@@ -62,13 +64,14 @@ function Events() {
 
   useEffect(() => {
     fetchEvents();
-  }, [events, filter]); // Include filter in dependency array
+  }, [events, filter,userRegistrations]); // Include filter in dependency array
 
   const handleEdit = (event) => {
     setEditedEvent(event);
     setShowEditModal(true);
   };
-
+  
+  //save edited details
   const handleSaveEdit = async () => {
     try {
       await axios.put(`http://localhost:3000/events/${editedEvent._id}`, editedEvent);
@@ -80,10 +83,12 @@ function Events() {
     }
   };
 
+  //cancel editing
   const handleCancelEdit = () => {
     setShowEditModal(false);
   };
 
+  //handle changes while editing details
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditedEvent({
@@ -93,6 +98,7 @@ function Events() {
     });
   };
 
+  //cancel event
   const handleCancelEvent = async (event) => {
     try {
       const updatedEvent = { ...event, status: 'cancelled', cancelledAt: new Date().toISOString()};
@@ -104,65 +110,183 @@ function Events() {
     }
   };
 
-  const filterEvents = (status) => {
-    setFilter(status);
+
+
+ //register for event
+  const handleRegister = async (event) => {
+    try {
+      const user_id = userId.replace(/^"(.*)"$/, '$1');
+  
+      // Check if the user is already registered for the event
+      const response = await axios.get(`http://localhost:3000/registrations/${event._id}/${user_id}`);
+  
+      if (Object.keys(response.data).length > 0) {
+        // User is already registered, show error toast
+        toast.error('You already registered for this event');
+      } else {
+        // User is not registered, proceed with registration
+        const registrationData = {
+          event_id: event._id,
+          user_id: user_id,
+          registeredAt: new Date().toISOString()
+        };
+        await axios.post('http://localhost:3000/registrations', registrationData);
+  
+        // Registration successful, show success toast
+        toast.success('Event Registered Successfully');
+        fetchEvents();
+      }
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message === 'Registrations are closed') {
+        // Registrations are closed, show error toast
+        toast.error('Registrations for this event are closed');
+      } else {
+        // Other error occurred, show generic error toast
+        toast.error('Error registering for event');
+      }
+    }
+  };
+  
+  // interest for event
+  const handleLike = async (event) => {
+    try {
+      const user_id= userId.replace(/^"(.*)"$/, '$1');
+      // Send a POST request to the backend to add a like for the event
+      await axios.post('http://localhost:3000/interests/like', {
+        eventId: event._id,
+        userId: user_id
+      });
+      
+      // Display a success toast
+      toast.success('Event Liked Successfully');
+      
+      // Fetch updated events data
+      fetchEvents();
+    } catch (error) {
+      // Display an error toast if something goes wrong
+      toast.error('Error liking event');
+    }
   };
 
-  const filteredEvents = filter === 'all' ? events.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) : events.filter(event => event.status === filter);
 
+  // set usestate to filter status
+  const filterEvents = (status) => {
+    setFilter(status);
+    if(status==='registeredevents')
+     setShowRegisteredEvents(true)
+    else
+     setShowRegisteredEvents(false)
+  };
+
+  //filter the events
+  const filteredEvents = filter === 'all' ? events.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) : !(filter=='registeredevents') ? events.filter(event => event.status === filter) : '  ';
+
+  // count for each status
   const eventCounts = {
     'all': events.length,
     'upcoming': events.filter(event => event.status === 'upcoming').length, // Corrected filter
     'ongoing': events.filter(event => event.status === 'ongoing').length,
     'completed': events.filter(event => event.status === 'completed').length,
-    'cancelled': events.filter(event => event.status === 'cancelled').length
+    'cancelled': events.filter(event => event.status === 'cancelled').length,
+    'registeredevents':userRegistrations.length
   };
 
+  //fetch the events that the user registered for, whenever the userid changes
+  useEffect(()=>{
 
-  const handleRegister = async (event) => {
+  const user_id = userId.replace(/^"(.*)"$/, '$1');
+  const fetchUserRegistrations = async () => {
     try {
-      const registrationData = {
-        event_id: event._id,
-        user_id: userId.replace(/^"(.*)"$/, '$1'),
-        registeredAt: new Date().toISOString()
-      };
-      console.log(registrationData)
-      await axios.post('http://localhost:3000/registrations', registrationData);
-      toast.success('Event Registered Successfully');
-      fetchEvents(); 
+      const response = await axios.get(`http://localhost:3000/registeredevents/${user_id}`);
+      setUserRegistrations(response.data);     
+      
     } catch (error) {
-      toast.error('Error registering for event');
+      console.error('Error fetching user registrations:', error);
     }
   };
+  
+if (userId) {
+    fetchUserRegistrations();
+  }
+}, [userId,userRegistrations]);
 
+const handleSearchInputChange = (event) => {
+  const query = event.target.value.toLowerCase();
+  setSearchQuery(query);
+}
+
+useEffect(() => {
+
+  const filtered = events.filter(event => {   //events or filteredevents
+    // Check if any of the fields contain the search query
+    return (
+      event.eventName.toLowerCase().includes(searchQuery) ||
+      event.trainer.toLowerCase().includes(searchQuery) ||
+      event.location.toLowerCase().includes(searchQuery) ||
+      event.startDate.includes(searchQuery) ||
+      event.startTime.includes(searchQuery) ||
+      event.endDate.includes(searchQuery) ||
+      event.endTime.includes(searchQuery) 
+    );
+  });
+
+  // Update the state with the filtered events
+  setSearchResultEvents(  !showRegisteredEvents ? searchQuery ? filtered : filteredEvents : userRegistrations );
+  
+}, [searchQuery, events])
 
   return (
     <div className="events-list row p-2">
+
+        <div className="col-12 my-2 d-flex justify-content-center">
+          <input
+            type="text"
+            className="form-control w-25"
+            placeholder="Search Events"
+            value={searchQuery}
+            onChange={handleSearchInputChange}
+          />
+        </div>
+
       <div className="filter-buttons row ">
-        <div className="col-2">
+
+        <div className="col-2 text-center">
         <span  className={`filter-tab ${filter === 'all' ? 'active' : ''}`} 
         onClick={() => filterEvents('all')}>All <span className='badg'>{eventCounts['all']}</span>
         </span>
         </div>
-        <div className="col-2">
+
+{ !isAdmin &&
+       <div className="col-2 text-center">
+        <span  onClick={() => filterEvents('registeredevents')} >Registered Events <span className='badg'>{eventCounts['registeredevents']}</span>
+        </span >
+        </div>
+}
+       
+        <div className="col-2 text-center">
         <span  onClick={() => filterEvents('upcoming')} >Upcoming <span className='badg'>{eventCounts['upcoming']}</span>
         </span >
         </div>
-        <div className="col-2">
+        <div className="col-2 text-center">
         <span  onClick={() => filterEvents('ongoing')} >Ongoing <span className='badg'>{eventCounts['ongoing']}</span>
         </span >
         </div>
-        <div className="col-2">
+        <div className="col-2 text-center">
         <span  onClick={() => filterEvents('completed')} >Completed <span className='badg'>{eventCounts['completed']}</span>
         </span >
         </div>
-        <div className="col-2">
+        <div className="col-2 text-center">
         <span  onClick={() => filterEvents('cancelled')} >Cancelled <span className='badg'>{eventCounts['cancelled']}</span>
         </span >
       </div>
     </div>
-      <div className="events-cards row">
-        {filteredEvents.map(event => (
+
+
+     <div className="events-cards row ">
+
+    { !showRegisteredEvents  ?
+
+       ( searchResultEvents.map(event => (
           <div key={event._id} className={`col-lg-3 col-md-6 ${filter==='all' && (event.status === 'completed' || event.status === 'cancelled' || event.status === 'ongoing') ? 'disabled-card' : ''}`}>
             <div className="card my-3">
               <div className="card-body pb-1">
@@ -173,7 +297,7 @@ function Events() {
                 <h6 className="card-subtitle mb-2 text-body-secondary mt-2 mb-3">{event.description}</h6>
                 <p className="card-text"> Start Time : {new Date(event.startDate).toLocaleDateString()} : {event.startTime} </p>
                 <p className="card-text"> End Time : {new Date(event.endDate).toLocaleDateString()} : {event.endTime}</p>
-                <p className='card-text'>Location : {event.location} </p>
+                <p className='card-text'>Location/Meet Link : {event.location} </p>
                 <p className='card-text'>Trainer : {event.trainer} </p>
                 <p className='card-text'>Prerequisites: {event.prerequisites} </p>
                 <p className='card-text'>Capacity: {event.capacity} </p>
@@ -188,8 +312,8 @@ function Events() {
             )
             :
             ( <>
-                  <button className={`btn btn-primary w-50 me-2 ${!(filter==='all' ) ? 'disabled-btn' : ''}`}  onClick={() => handleRegister(event)}>Register</button>
-                  <button  className={`btn btn-primary w-50  ${!(filter==='all') ? 'disabled-btn' : ''}`} onClick={() => handleLike(event)}>Like</button>
+                  <button className={`btn btn-primary w-50 me-2 ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`}  onClick={() => handleRegister(event)}>Register</button>
+                  <button  className={`btn btn-primary w-50  ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`} onClick={() => handleLike(event)}>Like</button>
               </>
             )
 }
@@ -198,9 +322,50 @@ function Events() {
               </div>
             </div>
           </div>
-        ))}
-      </div>
+        ))
+     
+    ) :
 
+    (  
+         userRegistrations.map(event => (
+          <div key={event._id} className={`col-lg-3 col-md-6 ${filter === 'all' && (event.status === 'completed' || event.status === 'cancelled' || event.status === 'ongoing') ? 'disabled-card' : ''}`}>
+            <div className="card my-3">
+            <div className="card-body pb-1">
+                <div className='d-flex justify-content-between'>
+                  <h5 className="card-title">{event.eventName}</h5>
+                  <p className='text-center p-0 m-0 status'>{event.status}</p>
+                </div>
+                <h6 className="card-subtitle mb-2 text-body-secondary mt-2 mb-3">{event.description}</h6>
+                <p className="card-text"> Start Time : {new Date(event.startDate).toLocaleDateString()} : {event.startTime} </p>
+                <p className="card-text"> End Time : {new Date(event.endDate).toLocaleDateString()} : {event.endTime}</p>
+                <p className='card-text'>Location/Meet Link: {event.location} </p>
+                <p className='card-text'>Trainer : {event.trainer} </p>
+                <p className='card-text'>Prerequisites: {event.prerequisites} </p>
+                <p className='card-text'>Capacity: {event.capacity} </p>
+                <p className='card-text'>Registrations: {event.registrations} </p>
+                <div className='d-flex justify-content-around mb-1'>
+
+{ isAdmin ?
+            ( <>
+                  <button className={`btn btn-primary w-50 me-2 ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`}  onClick={() => handleEdit(event)}>Edit</button>
+                  <button  className={`btn btn-primary w-50  ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`} onClick={() => handleCancelEvent(event)}>Cancel</button>
+              </>
+            )
+            :
+            ( <>
+                  <button className={`btn btn-primary w-50 me-2 ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`}  onClick={() => handleRegister(event)}>Register</button>
+                  <button  className={`btn btn-primary w-50  ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`} onClick={() => handleLike(event)}>Like</button>
+              </>
+            )
+}
+
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
+    )}
+      
 
 {showEditModal && (
         <Modal
@@ -328,6 +493,7 @@ function Events() {
       )}
 
 
+    </div>
     </div>
   );
 }

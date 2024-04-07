@@ -4,8 +4,7 @@ const userController = require('../Controllers/userController');
 const eventController = require('../Controllers/eventController');
 const registrationController = require('../Controllers/registrationController');
 const isAdminController = require('../Controllers/isAdminController');
-const interestDetailsController = require('../Controllers/interestDetailsController');
-
+const interestController = require('../Controllers/interestController');
 
 router.post('/login', userController.login);
 router.post('/createUser', userController.createUser);
@@ -16,6 +15,8 @@ router.get('/events', eventController.getAllEvents);
 router.put('/events/:id', eventController.updateEvent);
 router.post('/registrations', registrationController.registerEvent)
 router.get('/adminStatus/:id', isAdminController.checkAdminStatus);
-router.post('/interestDetails', interestDetailsController.createInterestDetails);
+router.post('/interests/like', interestController.addLike);
+router.get('/registrations/:eventId/:userId', registrationController.checkRegistration);
+router.get('/registeredevents/:userId', registrationController.getRegisteredEvents);
 
 module.exports = router;
