@@ -15,41 +15,40 @@ const transporter = nodemailer.createTransport({
 // function to register for an event by user
 exports.registerEvent = async (req, res) => {
   try {
-    const { event_id, user_id, registeredAt } = req.body;
+    const { event_id, user_id, registeredAt } = req.body;   
+    
+    const event = await EventDetails.findById(event_id);
+
+     // Fetch user details
+    const user = await UserDetails.findById(user_id);
+    //if user not found
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
     
     // Check if the event has reached its capacity
-    const event = await EventDetails.findById(event_id);
-    
     if (event.registrations >= event.capacity) {
-      // Registrations are closed, add the user to interestDetails
-     
-      // Send confirmation email to the user
+
+    // Registrations are closed, add the user to interestDetails, send mail to user
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: user.email,
       subject: 'Event Registration Closed',
       text: `Dear ${user.userName},\n\n` +
-        `We are sorry to say that the registrations are closed for the event : ${event.name}\n\n` +
-        `We will notify you when there is any event for ${event.name} in the future `
-
+        `We are sorry to say that the registrations are closed for the event : ${event.eventName} \n\n` +
+        `We will notify you when there is any event for ${event.eventName} in the future `+
         `Regards,\n` +
         `Employee Learning Platform`
     };
 
-    await transporter.sendMail(mailOptions);
+      await transporter.sendMail(mailOptions);
 
+       // Registrations are closed, add the user to interestDetails
       await InterestDetails.findOneAndUpdate(
         { event_id: event_id },
         { $addToSet: { likes: user_id } },
         { upsert: true }
       );
-
-
-     // Fetch user details
-    const user = await UserDetails.findById(user_id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
 
 
     return res.status(400).json({ message: 'Registrations are closed' });
@@ -72,13 +71,13 @@ exports.registerEvent = async (req, res) => {
       subject: 'Event Registration Confirmation',
       text: `Dear ${user.userName},\n\n` +
         `Thank you for registering for the event.\n\n` +
-        `Event Name: ${event.name}\n` +
-        `Start Time: ${event.StartDate} :${event.StartTime} \n` +
-        `End Time: ${event.EndDate} :${event.EndTime} \n` +
-        `Prerequisites: ${event.prerequisites}\n\n` +
-        `Location: ${event.location}\n\n` +
+        `Event Name: ${event.eventName}\n` +
+        `Start Time: ${event.startDate} :${event.startTime} \n` +
+        `End Time: ${event.endDate} :${event.endTime} \n` +
+        `Prerequisites: ${event.prerequisites}\n` +
+        `Location: ${event.location}\n` +
         `Trainer: ${event.trainer}\n\n` +
-        `Have a great learning`+
+        `Have a great learning !\n`+
         `Regards,\n` +
         `Employee Learning Platform`
     };
