@@ -1,3 +1,25 @@
+body h1{
+  color:#19105B;
+  padding:10px;
+}
+
+.inputBoxSpan{
+  padding-left: 10px;
+  border-radius: 5px;
+}
+.inputBoxSpan:hover {
+  border: 1px solid #dbe2ed;
+}
+.inputBox {
+  height: 50px;
+  border-radius: 3px;
+  width:250px;
+  font-size: 15px;
+  outline: none;
+  border:none;
+  letter-spacing: 1.5px;
+}
+
 .container-bg {
     display: flex;
     flex-direction: column;
@@ -20,26 +42,19 @@
     padding:5rem;
   }
   
-  .inputBox {
-    height: 40px;
-    width: 350px;
-    font-size: medium;
-    color:black;
-    border-radius: 8px;
-    border: none;
-    outline:none;
-    padding-left: 8px;
+  .fp{
+    color:#2b7c97;
   }
+
   .submitButton{
-    height: 40px;
-    width: 350px;
-    border: none;
-  background: cornflowerblue;
-  color: white;
-  padding: 12px 24px;
-  font-size: medium;
-  font-weight:bold;
-  border-radius: 8px;
-  cursor: pointer;
+    height: 45px;
+    border-radius: 3px;
+    width:288px;
+    font-size: 15px;
+    background: #19105B;
+    color: white;
+    cursor: pointer;
+    outline:none;
+    border:none;
   }
 

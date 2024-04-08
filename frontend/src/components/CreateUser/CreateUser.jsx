@@ -54,7 +54,7 @@ const CreateUser = ({ handleClose }) => {
     
     <Modal show={true} onHide={handleClose} backdrop="static" keyboard={false}>
     <Modal.Header closeButton>
-      <Modal.Title>Create User</Modal.Title>
+      <Modal.Title style={{color:'#19105B'}}>Create User</Modal.Title>
     </Modal.Header>
     <Modal.Body>
       <Form onSubmit={handleSubmit}>
@@ -100,10 +100,10 @@ const CreateUser = ({ handleClose }) => {
       </Form>
     </Modal.Body>
     <Modal.Footer>
-          <Button variant="secondary"  onClick={handleClose}>
+          <Button style={{ backgroundColor: '#FF095C', border: 'none' }} onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSubmit}>
+          <Button style={{ backgroundColor: '#FF095C', border: 'none' }} onClick={handleSubmit}>
             Create 
           </Button>
         </Modal.Footer>

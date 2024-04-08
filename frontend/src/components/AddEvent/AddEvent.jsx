@@ -116,7 +116,7 @@ function AddEvent( { handleClose } ) {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add Event</Modal.Title>
+          <Modal.Title style={{color:'#19105B'}}>Add Event</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>

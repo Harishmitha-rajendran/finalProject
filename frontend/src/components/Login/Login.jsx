@@ -5,6 +5,10 @@ import '../../index.css'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faLock } from '@fortawesome/free-solid-svg-icons';
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -46,23 +50,28 @@ const Login = () => {
     <div className='container-bg container-fluid'>
       <form className='form'  onSubmit={(e) => login(e)}>
         <h1>Login</h1>
+        <span className='inputBoxSpan d-flex justify-content-center align-items-center'>
+        <FontAwesomeIcon className='ml-1' icon={faEnvelope} style={{ color: "#19105b" }} />
         <input
           value={email}
-          placeholder="Enter your email here"
+          placeholder="Email"
           onChange={(event) => setEmail(event.target.value)}
-          className='inputBox'
+          className='inputBox mx-2'
           required
         />
+        </span>
+        <span className='inputBoxSpan md-flex justify-content-center align-items-center'>
+        <FontAwesomeIcon className='ml-1' icon={faLock} style={{ color: "#19105b" }} />
         <input
           value={password}
-          placeholder="Enter your password here"
+          placeholder="Password"
           onChange={(event) => setPassword(event.target.value)}
-          className='inputBox'
+          className='inputBox mx-2'
           required
         />
-        
+        </span>
         <button className='submitButton' type="submit" >Login</button>
-        <button className='submitButton' type='button' onClick={() => {navigate("/ForgotPassword")}}>Forgot Password ? </button>
+        <span className='fp'  onClick={() => {navigate("/ForgotPassword")}}>Forgot Password ? </span>
         
       </form>
        <ToastContainer /> 

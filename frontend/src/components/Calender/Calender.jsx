@@ -43,14 +43,16 @@ function MyCalendar() {
       let eventStyle = {};
       switch (event.status) {
         case 'completed':
+          eventStyle = { style: { backgroundColor: '#ff095b92' } };
+          break;
         case 'cancelled':
-          eventStyle = { style: { backgroundColor: 'red' } };
+          eventStyle = { style: { backgroundColor: '#ff0000b6' } };
           break;
         case 'ongoing':
-          eventStyle = { style: { backgroundColor: 'blue' } };
+          eventStyle = { style: { backgroundColor:'#008000ad' } };
           break;
         case 'upcoming':
-          eventStyle = { style: { backgroundColor: 'green' } };
+          eventStyle = { style: { backgroundColor: '#00bfff' } };
           break;
         default:
           eventStyle = {};
@@ -66,6 +68,7 @@ function MyCalendar() {
           startAccessor="start"
           endAccessor="end"
           eventPropGetter={getEventProps} 
+          tooltipAccessor={event => `Status: ${event.status}`}
         />
       </div>
     );

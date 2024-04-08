@@ -291,7 +291,7 @@ useEffect(() => {
             <div className="card my-3">
               <div className="card-body pb-1">
                 <div className='d-flex justify-content-between'>
-                  <h5 className="card-title">{event.eventName}</h5>
+                  <h5 className="card-title ">{event.eventName}</h5>
                   <p className='text-center p-0 m-0 status'>{event.status}</p>
                 </div>
                 <h6 className="card-subtitle mb-2 text-body-secondary mt-2 mb-3">{event.description}</h6>
@@ -332,7 +332,7 @@ useEffect(() => {
             <div className="card my-3">
             <div className="card-body pb-1">
                 <div className='d-flex justify-content-between'>
-                  <h5 className="card-title">{event.eventName}</h5>
+                  <h5 className="card-title ">{event.eventName}</h5>
                   <p className='text-center p-0 m-0 status'>{event.status}</p>
                 </div>
                 <h6 className="card-subtitle mb-2 text-body-secondary mt-2 mb-3">{event.description}</h6>

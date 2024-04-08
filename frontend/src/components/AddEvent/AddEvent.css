@@ -27,6 +27,8 @@
   .modal-footer button {
     font-size: 16px;
     padding: 10px 20px;
+    background-color: #FF095C;
+    border: none
   }
 .col{
     display:flex;
