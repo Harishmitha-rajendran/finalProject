@@ -41,7 +41,7 @@ const addEvent = async (req, res) => {
         subject: 'New Event Added',
         text: `Dear ${user.userName},\n\n` +
           `A new event has been added:\n\n` +
-          `Event Name: ${newEvent.name}\n` +
+          `Event Name: ${newEvent.eventName}\n` +
           `Location: ${newEvent.location}\n` +
           `Trainer: ${newEvent.trainer}\n` +
           `Start Date: ${newEvent.startDate} : ${newEvent.startTime} \n` +
@@ -144,15 +144,15 @@ const updateEvent = async (req, res) => {
           to: user.email,
           subject: 'Event Update or Cancellation',
           text: `Dear ${user.userName},\n\n` +
-            `The event "${existingEvent.eventName}" has been updated or cancelled.\n\n` +
+            `The event "${updatedEvent.eventName}" has been updated or cancelled.\n\n` +
             `Details:\n` +
-            `Event Name: ${existingEvent.eventName}\n` +
-            `Location: ${existingEvent.location}\n` +
-            `Trainer: ${existingEvent.trainer}\n` +
-            `Start Date: ${existingEvent.startDate} : ${existingEvent.startTime} \n` +
-            `End Date: ${existingEvent.endDate} : ${existingEvent.endTime}\n` +
-            `Prerequisites: ${existingEvent.prerequisites}\n\n` +
-            `Status: ${existingEvent.status}\n\n` +
+            `Event Name: ${updatedEvent.eventName}\n` +
+            `Location: ${updatedEvent.location}\n` +
+            `Trainer: ${updatedEvent.trainer}\n` +
+            `Start Date: ${updatedEvent.startDate} : ${updatedEvent.startTime} \n` +
+            `End Date: ${updatedEvent.endDate} : ${updatedEvent.endTime}\n` +
+            `Prerequisites: ${updatedEvent.prerequisites}\n` +
+            `Status: ${updatedEvent.status}\n\n` +
             `Please check the updated details on the platform.\n\n` +
             `Regards,\n` +
             `Employee Learning Platform`

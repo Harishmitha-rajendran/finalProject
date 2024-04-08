@@ -37,11 +37,11 @@ exports.login = async (req, res) => {
       }
 
       // console.log(password)
-      // const hashedPassword1 = await bcrypt.hash(password, 10);
+       const hashedPassword1 = await bcrypt.hash(password, 10);
       // console.log(hashedPassword1)
-      //const passwordMatch = await bcrypt.compare(password, user.password);
+      const passwordMatch = await bcrypt.compare(password, user.password);
   
-      if ( password==user.password) { //   password==user.password
+      if (  passwordMatch) { //   password==user.password
         return res.json({ success: true, message: 'Login successful', userId: user._id });
 
       } else {
