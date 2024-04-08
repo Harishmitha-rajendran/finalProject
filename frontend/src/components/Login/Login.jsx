@@ -61,7 +61,7 @@ const Login = () => {
           required
         />
         
-        <button className='submitButton' type="submit" >Login</button>
+        <button className='submitButton ' type="submit" >Login</button>
         <button className='submitButton' type='button' onClick={() => {navigate("/ForgotPassword")}}>Forgot Password ? </button>
         
       </form>

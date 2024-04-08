@@ -1,6 +1,7 @@
 const UserDetails = require('../Models/userDetails');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+//const crypto = require('crypto');
 
 function generateRandomPassword() {
     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -41,7 +42,7 @@ exports.login = async (req, res) => {
       // console.log(hashedPassword1)
       const passwordMatch = await bcrypt.compare(password, user.password);
   
-      if (  passwordMatch) { //   password==user.password
+      if ( passwordMatch) { 
         return res.json({ success: true, message: 'Login successful', userId: user._id });
 
       } else {
