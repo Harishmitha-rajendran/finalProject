@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
+import Loader from "react-js-loader";
 
 
 const Login = () => {
@@ -70,7 +71,12 @@ const Login = () => {
           required
         />
         </span>
-        <button className='submitButton' type="submit" >Login</button>
+
+        <div className='submitDiv d-flex justify-content-center align-items-center'>
+        <button className='submitBtn' type="submit" >Login </button>
+        <Loader type="spinner-default" bgColor='white' color='white' size={25} />
+        </div>
+
         <span className='fp'  onClick={() => {navigate("/ForgotPassword")}}>Forgot Password ? </span>
         
       </form>

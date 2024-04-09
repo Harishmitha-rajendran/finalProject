@@ -56,6 +56,37 @@ const addEvent = async (req, res) => {
       await transporter.sendMail(mailOptions);
     }
 
+    // // Find the event ID based on the event name
+    // const existingEvent = await EventDetails.findOne({ eventName: newEvent.eventName });
+
+    // if (existingEvent) {
+    //   // Find the user IDs associated with the event ID
+    //   const interestedUsers = await InterestDetails.findOne({ eventId: existingEvent._id });
+
+    //   if (interestedUsers && interestedUsers.userIds.length > 0) {
+    //     // Fetch user details using the obtained user IDs
+    //     const usersToNotify = await UserDetails.find({ _id: { $in: interestedUsers.userIds } });
+
+    //     // Send emails to users who are interested in the event
+    //     for (const user of usersToNotify) {
+    //       const mailOptions = {
+    //         from: process.env.EMAIL_USER,
+    //         to: user.email,
+    //         subject: `Event of Interest: ${newEvent.eventName}`,
+    //         text: `Dear ${user.userName},\n\n` +
+    //           `An event you liked has been scheduled:\n\n` +
+    //           `Event Name: ${newEvent.eventName}\n\n` +
+    //           `Regards,\n` +
+    //           `Employee Learning Platform`
+    //       };
+
+    //       // Send notification email to the user
+    //       await transporter.sendMail(mailOptions);
+    //     }
+    //   }
+    // }
+
+
 
     // Respond with a success message
     res.status(201).json({ message: 'Event created successfully', event: newEvent });

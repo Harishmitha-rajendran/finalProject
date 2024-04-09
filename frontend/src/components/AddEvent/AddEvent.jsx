@@ -78,7 +78,6 @@ function AddEvent( { handleClose } ) {
 
       try {
         await axios.post('http://localhost:3000/addEvent', formData);
-        console.log(formData)
         handleClose();
         toast.success('Event details saved successfully'); 
         // Clear the form data
@@ -105,9 +104,6 @@ function AddEvent( { handleClose } ) {
 
   return (
     <>
-      {/* <Button variant="primary" onClick={handleShow}>
-        Add Event
-      </Button> */}
 
       <Modal
         show={true}
@@ -212,13 +208,13 @@ function AddEvent( { handleClose } ) {
                 placeholder="Enter event prerequisites"
               />
             </Form.Group>
-            <Form.Group controlId="capacity">
-  <Form.Label>Capacity</Form.Label>
+<Form.Group controlId="capacity">
+ <Form.Label>Capacity</Form.Label>
   <Form.Control
     name="capacity"
-    type="number" // Change the type to "number"
-    value={formData.capacity} // Assuming formData.capacity holds the value for capacity
-    onChange={handleChange} // Assuming handleChange function handles changes in the form data
+    type="number" 
+    value={formData.capacity} 
+    onChange={handleChange} 
     placeholder="Enter event capacity"
   />
 </Form.Group>
@@ -226,10 +222,10 @@ function AddEvent( { handleClose } ) {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary"  onClick={handleClose}>
+          <Button onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSave}>
+          <Button onClick={handleSave}>
             Save
           </Button>
         </Modal.Footer>

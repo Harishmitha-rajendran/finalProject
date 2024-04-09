@@ -45,15 +45,17 @@ body h1{
   .fp{
     color:#2b7c97;
   }
-
-  .submitButton{
+  .submitDiv{
     height: 45px;
-    border-radius: 3px;
-    width:288px;
-    font-size: 15px;
+    border-radius: 5px;
+    width:290px;
     background: #19105B;
-    color: white;
     cursor: pointer;
+  }
+  .submitBtn{
+    font-size: 15px;
+    color: white;
+    background: #19105B;
     outline:none;
     border:none;
   }

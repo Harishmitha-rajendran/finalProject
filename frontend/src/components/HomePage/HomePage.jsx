@@ -20,11 +20,10 @@ function HomePage() {
     const [showCalender, setShowCalender] = useState(false); 
     const navigate = useNavigate();
 
-    const toggleCalender = () => {
-        setShowCalender(!showCalender);
+    const showCalenderComponent = (val) => {
+        setShowCalender(val);
     };
-
-
+    
     useEffect(() => {
         // Fetch user ID from localStorage
         const userId = localStorage.getItem('userId');
@@ -65,10 +64,10 @@ function HomePage() {
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="m-auto">
-                                <Nav.Link style={{color:'white'}} onClick={() => { toggleCalender(); }}>Home</Nav.Link>
+                                <Nav.Link style={{color:'white'}} onClick={() => { showCalenderComponent(false) }}>Home</Nav.Link>
                                 <Nav.Link style={{color:'white'}} onClick={toggleAddEvent}>Add Event</Nav.Link>
                                 <Nav.Link style={{color:'white'}} onClick={toggleCreateUser}>Create User</Nav.Link>
-                                <Nav.Link style={{color:'white'}} onClick={() => { toggleCalender(); }}>Calender</Nav.Link>
+                                <Nav.Link style={{color:'white'}} onClick={() => { showCalenderComponent(true) }}>Calender</Nav.Link>
                                 <Nav.Link  style={{color:'white'}} onClick={() => { localStorage.removeItem('userId'); navigate('/') }}>Logout</Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
@@ -77,12 +76,12 @@ function HomePage() {
             ) : (
                 <Navbar expand="lg" className="nav px-3">
                     <Container fluid={true}>
-                        <Navbar.Brand style={{color:'white'}} href="#home">User</Navbar.Brand>
+                        <Navbar.Brand style={{color:'white'}} href="#home">ELP</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
-                            <Nav className="me-auto">
-                            <Nav.Link style={{color:'white'}} onClick={() => { toggleCalender(); }}>Home</Nav.Link>
-                            <Nav.Link style={{color:'white'}} onClick={() => { toggleCalender(); }}>Calender</Nav.Link>
+                            <Nav className="m-auto">
+                            <Nav.Link style={{color:'white'}} onClick={() => { showCalenderComponent(false) }}>Home</Nav.Link>
+                            <Nav.Link style={{color:'white'}} onClick={() => { showCalenderComponent(true) }}>Calender</Nav.Link>
                             <Nav.Link style={{color:'white'}} onClick={() => { localStorage.removeItem('userId'); navigate('/') }}>Logout</Nav.Link>
                             </Nav>
                         </Navbar.Collapse>

@@ -10,7 +10,7 @@ function Events() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editedEvent, setEditedEvent] = useState({});
   const [filter, setFilter] = useState('all'); 
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true);
   const [userId,setUserId]=useState('')
   const [userRegistrations, setUserRegistrations] = useState([]);
   const [showRegisteredEvents,setShowRegisteredEvents]=useState(false);
@@ -236,9 +236,9 @@ useEffect(() => {
 }, [searchQuery, events])
 
   return (
-    <div className="events-list row p-2">
+    <div className="events-list container-fluid px-4">
 
-        <div className="col-12 my-2 d-flex justify-content-center">
+        <div className="col-12 mt-3 p-2 d-flex justify-content-center container-fluid">
           <input
             type="text"
             className="form-control w-25"
@@ -248,35 +248,34 @@ useEffect(() => {
           />
         </div>
 
-      <div className="filter-buttons row ">
+      <div className="filter-buttons row mb-2">
 
         <div className="col-2 text-center">
-        <span  className={`filter-tab ${filter === 'all' ? 'active' : ''}`} 
-        onClick={() => filterEvents('all')}>All <span className='badg'>{eventCounts['all']}</span>
+        <span onClick={() => filterEvents('all')} className='status-btn'>All <span className='badg'>{eventCounts['all']}</span>
         </span>
         </div>
 
 { !isAdmin &&
        <div className="col-2 text-center">
-        <span  onClick={() => filterEvents('registeredevents')} >Registered Events <span className='badg'>{eventCounts['registeredevents']}</span>
+        <span  onClick={() => filterEvents('registeredevents')} className='status-btn'>Registered Events <span className='badg'>{eventCounts['registeredevents']}</span>
         </span >
         </div>
 }
        
         <div className="col-2 text-center">
-        <span  onClick={() => filterEvents('upcoming')} >Upcoming <span className='badg'>{eventCounts['upcoming']}</span>
+        <span  onClick={() => filterEvents('upcoming')} className='status-btn'>Upcoming <span className='badg'>{eventCounts['upcoming']}</span>
         </span >
         </div>
         <div className="col-2 text-center">
-        <span  onClick={() => filterEvents('ongoing')} >Ongoing <span className='badg'>{eventCounts['ongoing']}</span>
+        <span  onClick={() => filterEvents('ongoing')} className='status-btn'>Ongoing <span className='badg'>{eventCounts['ongoing']}</span>
         </span >
         </div>
         <div className="col-2 text-center">
-        <span  onClick={() => filterEvents('completed')} >Completed <span className='badg'>{eventCounts['completed']}</span>
+        <span  onClick={() => filterEvents('completed')} className='status-btn'>Completed <span className='badg'>{eventCounts['completed']}</span>
         </span >
         </div>
         <div className="col-2 text-center">
-        <span  onClick={() => filterEvents('cancelled')} >Cancelled <span className='badg'>{eventCounts['cancelled']}</span>
+        <span  onClick={() => filterEvents('cancelled')} className='status-btn' >Cancelled <span className='badg'>{eventCounts['cancelled']}</span>
         </span >
       </div>
     </div>
@@ -288,10 +287,10 @@ useEffect(() => {
 
        ( searchResultEvents.map(event => (
           <div key={event._id} className={`col-lg-3 col-md-6 ${filter==='all' && (event.status === 'completed' || event.status === 'cancelled' || event.status === 'ongoing') ? 'disabled-card' : ''}`}>
-            <div className="card my-3">
+            <div className="card my-2">
               <div className="card-body pb-1">
                 <div className='d-flex justify-content-between'>
-                  <h5 className="card-title ">{event.eventName}</h5>
+                  <h5 className="card-title" style={{color:'#19105B'}}>{event.eventName}</h5>
                   <p className='text-center p-0 m-0 status'>{event.status}</p>
                 </div>
                 <h6 className="card-subtitle mb-2 text-body-secondary mt-2 mb-3">{event.description}</h6>
@@ -306,14 +305,14 @@ useEffect(() => {
 
 { isAdmin ?
             ( <>
-                  <button className={`btn btn-primary w-50 me-2 ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`}  onClick={() => handleEdit(event)}>Edit</button>
-                  <button  className={`btn btn-primary w-50  ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`} onClick={() => handleCancelEvent(event)}>Cancel</button>
+                  <button className={`btn  w-50 me-2 ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`}  onClick={() => handleEdit(event)} style={{backgroundColor:'#FF095C',color:'white'}}>Edit</button>
+                  <button  className={`btn  w-50  ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`} onClick={() => handleCancelEvent(event)} style={{backgroundColor:'#FF095C',color:'white'}}>Cancel</button>
               </>
             )
             :
             ( <>
-                  <button className={`btn btn-primary w-50 me-2 ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`}  onClick={() => handleRegister(event)}>Register</button>
-                  <button  className={`btn btn-primary w-50  ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`} onClick={() => handleLike(event)}>Like</button>
+                  <button className={`btn w-50 me-2 ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`}  onClick={() => handleRegister(event)} style={{backgroundColor:'#FF095C',color:'white'}}>Register</button>
+                  <button  className={`btn w-50  ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`} onClick={() => handleLike(event)} style={{backgroundColor:'#FF095C',color:'white'}}>Like</button>
               </>
             )
 }
@@ -332,7 +331,7 @@ useEffect(() => {
             <div className="card my-3">
             <div className="card-body pb-1">
                 <div className='d-flex justify-content-between'>
-                  <h5 className="card-title ">{event.eventName}</h5>
+                  <h5 className="card-title" style={{color:'#19105B'}}>{event.eventName}</h5>
                   <p className='text-center p-0 m-0 status'>{event.status}</p>
                 </div>
                 <h6 className="card-subtitle mb-2 text-body-secondary mt-2 mb-3">{event.description}</h6>
@@ -375,7 +374,7 @@ useEffect(() => {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Edit Event</Modal.Title>
+          <Modal.Title style={{color:'#19105B'}}>Edit Event</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
