@@ -37,6 +37,7 @@ const ResetPassword = () => {
   return (
     <div className='container-bg container-fluid'>
       <form className='form'>
+      <h1>EduVerse</h1>
       <span className='inputBoxSpan md-flex justify-content-center align-items-center'>
         <FontAwesomeIcon className='ml-1' icon={faLock} style={{ color: "#19105b" }} />  
         <input 
@@ -60,7 +61,7 @@ const ResetPassword = () => {
         />
       </span>
         <button 
-        className='submitButton'
+        className='submitDiv'
         onClick={(e) => resetPassword(e)}>
         Reset Password
         </button>

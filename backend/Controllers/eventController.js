@@ -30,6 +30,9 @@ const addEvent = async (req, res) => {
     // Save the new event to the database
     await newEvent.save();
 
+    // Respond with a success message and then send mail
+    res.status(201).json({ message: 'Event created successfully', event: newEvent });
+
     // Fetch all users except those with role===admin
     const usersToNotify = await UserDetails.find({ role: { $ne: 'admin' } });
 
@@ -87,9 +90,6 @@ const addEvent = async (req, res) => {
     // }
 
 
-
-    // Respond with a success message
-    res.status(201).json({ message: 'Event created successfully', event: newEvent });
   } catch (error) {
     // If an error occurs, respond with an error message
     console.error('Error saving event details:', error);
@@ -163,6 +163,9 @@ const updateEvent = async (req, res) => {
       return res.status(404).json({ message: 'Event not found' });
     }
 
+    // Respond with the updated event details
+    res.status(200).json({ message: 'Event updated successfully', event: updatedEvent });
+
     // Fetch registrations for the specific event
     const registrations = await RegistrationDetails.find({ event_id: eventId });
 
@@ -194,9 +197,6 @@ const updateEvent = async (req, res) => {
       }
     }
 
-
-    // Respond with the updated event details
-    res.status(200).json({ message: 'Event updated successfully', event: updatedEvent });
   } catch (error) {
     console.error('Error updating event:', error);
     res.status(500).json({ message: 'Failed to update event', error: error.message });

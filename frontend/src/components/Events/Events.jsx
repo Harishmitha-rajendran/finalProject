@@ -233,7 +233,7 @@ useEffect(() => {
   // Update the state with the filtered events
   setSearchResultEvents(  !showRegisteredEvents ? searchQuery ? filtered : filteredEvents : userRegistrations );
   
-}, [searchQuery, events])
+}, [searchQuery,events])
 
   return (
     <div className="events-list container-fluid px-4">

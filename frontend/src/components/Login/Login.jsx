@@ -26,12 +26,15 @@ const Login = () => {
       });
       
       if (response.data.success) {
+
         const userId= response.data.userId;
 
         // Store user data in localStorage
         localStorage.setItem("userId", JSON.stringify(userId));
         navigate('/HomePage')
-        toast.success(response.data.message);
+
+         toast.success(response.data.message);
+        
       } else {
         toast.error(response.data.message);
       }
@@ -50,10 +53,11 @@ const Login = () => {
   return (
     <div className='container-bg container-fluid'>
       <form className='form'  onSubmit={(e) => login(e)}>
-        <h1>Login</h1>
+        <h1>EduVerse</h1>
         <span className='inputBoxSpan d-flex justify-content-center align-items-center'>
         <FontAwesomeIcon className='ml-1' icon={faEnvelope} style={{ color: "#19105b" }} />
         <input
+          type='email'
           value={email}
           placeholder="Email"
           onChange={(event) => setEmail(event.target.value)}
@@ -64,6 +68,7 @@ const Login = () => {
         <span className='inputBoxSpan md-flex justify-content-center align-items-center'>
         <FontAwesomeIcon className='ml-1' icon={faLock} style={{ color: "#19105b" }} />
         <input
+          type='password'
           value={password}
           placeholder="Password"
           onChange={(event) => setPassword(event.target.value)}
@@ -74,13 +79,14 @@ const Login = () => {
 
         <div className='submitDiv d-flex justify-content-center align-items-center'>
         <button className='submitBtn' type="submit" >Login </button>
-        <Loader type="spinner-default" bgColor='white' color='white' size={25} />
+        {/* <Loader type="spinner-default" bgColor='white' color='white' size={25} /> */}
         </div>
 
         <span className='fp'  onClick={() => {navigate("/ForgotPassword")}}>Forgot Password ? </span>
         
+       
       </form>
-       <ToastContainer /> 
+      <ToastContainer /> 
     </div>
   );
 }

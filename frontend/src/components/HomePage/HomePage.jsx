@@ -58,9 +58,9 @@ function HomePage() {
     return (
         <div className='container-fluid'>
             {isAdmin ? (
-                <Navbar expand="lg" className="nav px-3">
+                <Navbar expand="lg" className="nav px-4">
                     <Container fluid={true}>
-                        <Navbar.Brand style={{color:'white'}} href="#home">ELP</Navbar.Brand>
+                        <Navbar.Brand style={{color:'white'}} href="#home">EduVerse</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="m-auto">
@@ -74,9 +74,9 @@ function HomePage() {
                     </Container>
                 </Navbar>
             ) : (
-                <Navbar expand="lg" className="nav px-3">
+                <Navbar expand="lg" className="nav px-4">
                     <Container fluid={true}>
-                        <Navbar.Brand style={{color:'white'}} href="#home">ELP</Navbar.Brand>
+                        <Navbar.Brand style={{color:'white'}} href="#home">EduVerse</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="m-auto">

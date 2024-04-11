@@ -69,7 +69,7 @@ exports.login = async (req, res) => {
 
         // Hash the password using bcrypt
         const hashedPassword = await bcrypt.hash(newPassword, 10);
-        console.log(hashedPassword)
+        //console.log(hashedPassword)
 
         // Create a new user with the hashed password
         const userData = {
@@ -80,6 +80,9 @@ exports.login = async (req, res) => {
         };
 
         const newUser = await UserDetails.create(userData);
+
+        // Send success response and then send mail
+        res.status(200).json({ success: true, message: 'User created successfully and email sent.' });
 
         const mailOptions = {
             from: process.env.EMAIL_USER,
@@ -94,8 +97,6 @@ exports.login = async (req, res) => {
         // Send email to the user
         await transporter.sendMail(mailOptions);
 
-        // Send success response
-        res.status(200).json({ success: true, message: 'User created successfully and email sent.' });
     } catch (error) {
         console.error('Error creating user:', error);
         res.status(500).json({ success: false, message: 'Internal server error' });
@@ -110,6 +111,9 @@ exports.sendVerificationMail= async (req, res) => {
       if (!user) {
         return res.status(404).json({ success: false, message: 'User not found' });
       }
+
+      // else user found, send success msg and then mail
+      res.status(200).json({ success: true, message: 'Verification mail sent successfully' });
   
       const mailOptions = {
         from: process.env.EMAIL_USER,
@@ -119,7 +123,7 @@ exports.sendVerificationMail= async (req, res) => {
       };
   
       await transporter.sendMail(mailOptions);
-      res.status(200).json({ success: true, message: 'Verification mail sent successfully' });
+      
     } catch (error) {
       console.error('Error:', error);
       res.status(500).json({ success: false, message: 'Internal server error' });

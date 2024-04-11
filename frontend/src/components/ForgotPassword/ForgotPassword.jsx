@@ -23,9 +23,11 @@ const ForgotPassword = () => {
   return (
     <div className='container-bg container-fluid '>
          <form className='form'>
+         <h1>EduVerse</h1>
          <span className='inputBoxSpan md-flex justify-content-center align-items-center'>
          <FontAwesomeIcon className='ml-1' icon={faEnvelope} style={{ color: "#19105b" }} />
          <input
+         type='email'
           value={email}
           placeholder="Email"
           onChange={(event) => setEmail(event.target.value)}
@@ -33,7 +35,7 @@ const ForgotPassword = () => {
           required
         />
         </span>
-        <button className='submitButton'
+        <button className='submitDiv'
         onClick={(e)=>sendVerificationMail(e)}>
         Send Verification Mail
         </button>
