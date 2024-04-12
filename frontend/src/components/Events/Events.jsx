@@ -158,7 +158,7 @@ function Events() {
       });
       
       // Display a success toast
-      toast.success('Event Liked Successfully');
+      toast.success('Event Liked ');
       
       // Fetch updated events data
       fetchEvents();
@@ -167,6 +167,7 @@ function Events() {
       toast.error('Error liking event');
     }
   };
+
 
 
   // set usestate to filter status
@@ -299,14 +300,26 @@ useEffect(() => {
                 <p className='card-text'>Location/Meet Link : {event.location} </p>
                 <p className='card-text'>Trainer : {event.trainer} </p>
                 <p className='card-text'>Prerequisites: {event.prerequisites} </p>
-                <p className='card-text'>Capacity: {event.capacity} </p>
-                <p className='card-text'>Registrations: {event.registrations} </p>
-                <div className='d-flex justify-content-around mb-1'>
 
+{ isAdmin  ?  ( <>
+                   <p className='card-text'>Capacity: {event.capacity} </p>
+                   <p className='card-text'>Registrations: {event.registrations} </p>
+                </>
+              )
+            :
+            (
+              <>
+                <p className='card-text' style={{color:'#33186B'}}>{event.capacity - event.registrations} seats left ! </p>
+              </>
+            )
+}  
+              
+            <div className='d-flex justify-content-around mb-1'>
+              
 { isAdmin ?
             ( <>
-                  <button className={`btn  w-50 me-2 ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`}  onClick={() => handleEdit(event)} style={{backgroundColor:'#FF095C',color:'white'}}>Edit</button>
-                  <button  className={`btn  w-50  ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`} onClick={() => handleCancelEvent(event)} style={{backgroundColor:'#FF095C',color:'white'}}>Cancel</button>
+                  <button className={`btn  w-50  me-2 ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`}  onClick={() => handleEdit(event)} style={{backgroundColor:'#FF095C',color:'white'}}>Edit</button>
+                  <button  className={`btn w-50 ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`} onClick={() => handleCancelEvent(event)} style={{backgroundColor:'#FF095C',color:'white'}}>Cancel</button>
               </>
             )
             :

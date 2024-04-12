@@ -203,6 +203,7 @@ const updateEvent = async (req, res) => {
   }
 };
 
+
 module.exports = {
   addEvent,
   getAllEvents,

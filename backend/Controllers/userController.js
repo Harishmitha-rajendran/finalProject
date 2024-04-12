@@ -38,10 +38,6 @@ exports.login = async (req, res) => {
         return res.status(404).json({ success: false, message: 'User not found' });
       }
 
-      // console.log(password)
-      const hashedPassword1 = await bcrypt.hash(password, 10);
-
-      // console.log(hashedPassword1)
       const passwordMatch = await bcrypt.compare(password, user.password);
 
       if ( passwordMatch) { //   password==user.password
