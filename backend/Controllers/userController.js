@@ -2,6 +2,7 @@ const UserDetails = require('../Models/userDetails');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 //const crypto = require('crypto');
+const jwt = require('jsonwebtoken'); // Import JWT library
 
 function generateRandomPassword() {
     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -55,6 +56,31 @@ exports.login = async (req, res) => {
     }
   };
 
+// exports.login = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   try {
+//     const user = await UserDetails.findOne({ email });
+
+//     if (!user) {
+//       return res.status(404).json({ success: false, message: 'User not found' });
+//     }
+
+//     const passwordMatch = await bcrypt.compare(password, user.password);
+
+//     if (passwordMatch) {
+//       // Generate JWT token
+//       const token = jwt.sign({ userId: user._id }, 'harishmithaaaa', { expiresIn: '1h' });
+
+//       return res.json({ success: true, message: 'Login successful', token, userId: user._id });
+//     } else {
+//       return res.status(401).json({ success: false, message: 'Invalid password' });
+//     }
+//   } catch (error) {
+//     console.error('Error:', error);
+//     return res.status(500).json({ success: false, message: 'Internal server error' });
+//   }
+// };
 
   exports.createUser = async (req, res) => {
     try {
