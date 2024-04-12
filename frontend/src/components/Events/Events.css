@@ -3,24 +3,28 @@
     overflow-y: auto; 
   }
   .status{
-    color: red;
+    color: #A16BDB;
   }
   .disabled-card {
-    cursor: no-drop; /* Change cursor style to no-drop */
-    opacity: 0.6; /* Reduce opacity to visually indicate it's disabled */
-    pointer-events: none; /* Disable pointer events for the entire card */
-  }
-  span{
-    cursor: pointer;
+    cursor: no-drop; 
+    opacity: 0.6; 
+    pointer-events: none; 
   }
   .disabled-btn{
-    cursor: no-drop; /* Change cursor style to no-drop */
-    opacity: 0.5; /* Reduce opacity to visually indicate it's disabled */
-    pointer-events: none; /* Disable pointer events for the entire card */
+    cursor: no-drop; 
+    opacity: 0.5; 
+   
   }
 .col-5{
   width:20%;
 }
 .eventTitle{
   color:#19105B;
+}
+.card:hover{
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, #A16BDB 0px 1px 3px -1px;
+}
+
+.status-btn{
+  cursor: pointer;
 }

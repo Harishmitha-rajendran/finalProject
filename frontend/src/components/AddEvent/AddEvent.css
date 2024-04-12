@@ -24,7 +24,7 @@
     border-color: #80bdff; /* Blue border when focused */
   }
   
-  .modal-footer button {
+  .modal-footer button,.modal-footer button:hover {
     font-size: 16px;
     padding: 10px 20px;
     background-color: #FF095C;

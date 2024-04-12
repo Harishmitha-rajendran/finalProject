@@ -19,7 +19,7 @@ exports.registerEvent = async (req, res) => {
     
     const event = await EventDetails.findById(event_id);
 
-     // Fetch user details
+    // Fetch user details
     const user = await UserDetails.findById(user_id);
     //if user not found
     if (!user) {
@@ -28,6 +28,9 @@ exports.registerEvent = async (req, res) => {
     
     // Check if the event has reached its capacity
     if (event.registrations >= event.capacity) {
+
+      //send err msg and then mail
+      res.status(400).json({ message: 'Registrations are closed' })
 
     // Registrations are closed, add the user to interestDetails, send mail to user
     const mailOptions = {
@@ -51,7 +54,7 @@ exports.registerEvent = async (req, res) => {
       );
 
 
-    return res.status(400).json({ message: 'Registrations are closed' });
+    return ;
     }
 
     // if registration are open---- Increment registrations count in the events table
@@ -63,6 +66,9 @@ exports.registerEvent = async (req, res) => {
       user_id,
       registeredAt
     });
+
+    //send success msg and then mail
+    res.status(201).json({ message: 'Registration successful', registration });
 
     // Send confirmation email to the user
     const mailOptions = {
@@ -84,7 +90,6 @@ exports.registerEvent = async (req, res) => {
 
     await transporter.sendMail(mailOptions);
 
-    res.status(201).json({ message: 'Registration successful', registration });
   } catch (error) {
     console.error('Error registering for event:', error);
     res.status(500).json({ message: 'Internal server error' });

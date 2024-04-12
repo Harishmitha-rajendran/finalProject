@@ -23,13 +23,10 @@ function App() {
       <Route path="/" element={<Login />}/>
       <Route path="/ForgotPassword" element={<ForgotPassword />}/>
       <Route path="/ResetPassword/:email" element={<ResetPassword />} />
-      <Route path="/CreateUser" element={<CreateUser />} />
-      <Route path="/AddEvent" element={<AddEvent />} />
-      <Route path="/HomePage" element={<HomePage />} />
-      <Route path="/Calender" element={<Calender />} />
-      
-    </Routes>
-    </BrowserRouter>
+      <Route path="/HomePage" element={<HomePage />}>
+      </Route>
+      </Routes>
+      </BrowserRouter>
         
     </>
   )

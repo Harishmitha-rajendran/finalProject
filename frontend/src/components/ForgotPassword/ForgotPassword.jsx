@@ -4,6 +4,8 @@ import '../../index.css'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -21,14 +23,19 @@ const ForgotPassword = () => {
   return (
     <div className='container-bg container-fluid '>
          <form className='form'>
+         <h1>EduVerse</h1>
+         <span className='inputBoxSpan md-flex justify-content-center align-items-center'>
+         <FontAwesomeIcon className='ml-1' icon={faEnvelope} style={{ color: "#19105b" }} />
          <input
+         type='email'
           value={email}
-          placeholder="Enter your email here"
+          placeholder="Email"
           onChange={(event) => setEmail(event.target.value)}
-          className='inputBox'
+          className='inputBox mx-2'
           required
         />
-        <button 
+        </span>
+        <button className='submitDiv'
         onClick={(e)=>sendVerificationMail(e)}>
         Send Verification Mail
         </button>

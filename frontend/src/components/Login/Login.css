@@ -6,9 +6,10 @@ body h1{
 .inputBoxSpan{
   padding-left: 10px;
   border-radius: 5px;
+  border: 1px solid #dbe2ed;
 }
 .inputBoxSpan:hover {
-  border: 1px solid #dbe2ed;
+  border: 1px solid #19105B;
 }
 .inputBox {
   height: 50px;
@@ -44,16 +45,22 @@ body h1{
   
   .fp{
     color:#2b7c97;
+    cursor:pointer;
   }
-
-  .submitButton{
+  .submitDiv{
     height: 45px;
-    border-radius: 3px;
-    width:288px;
-    font-size: 15px;
+    border-radius: 5px;
+    width:290px;
     background: #19105B;
-    color: white;
     cursor: pointer;
+    color:white;
+    border:none;
+    outline: none;
+  }
+  .submitBtn{
+    font-size: 15px;
+    color: white;
+    background: #19105B;
     outline:none;
     border:none;
   }

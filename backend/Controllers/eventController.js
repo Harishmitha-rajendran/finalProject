@@ -30,6 +30,9 @@ const addEvent = async (req, res) => {
     // Save the new event to the database
     await newEvent.save();
 
+    // Respond with a success message and then send mail
+    res.status(201).json({ message: 'Event created successfully', event: newEvent });
+
     // Fetch all users except those with role===admin
     const usersToNotify = await UserDetails.find({ role: { $ne: 'admin' } });
 
@@ -56,9 +59,37 @@ const addEvent = async (req, res) => {
       await transporter.sendMail(mailOptions);
     }
 
+    // // Find the event ID based on the event name
+    // const existingEvent = await EventDetails.findOne({ eventName: newEvent.eventName });
 
-    // Respond with a success message
-    res.status(201).json({ message: 'Event created successfully', event: newEvent });
+    // if (existingEvent) {
+    //   // Find the user IDs associated with the event ID
+    //   const interestedUsers = await InterestDetails.findOne({ eventId: existingEvent._id });
+
+    //   if (interestedUsers && interestedUsers.userIds.length > 0) {
+    //     // Fetch user details using the obtained user IDs
+    //     const usersToNotify = await UserDetails.find({ _id: { $in: interestedUsers.userIds } });
+
+    //     // Send emails to users who are interested in the event
+    //     for (const user of usersToNotify) {
+    //       const mailOptions = {
+    //         from: process.env.EMAIL_USER,
+    //         to: user.email,
+    //         subject: `Event of Interest: ${newEvent.eventName}`,
+    //         text: `Dear ${user.userName},\n\n` +
+    //           `An event you liked has been scheduled:\n\n` +
+    //           `Event Name: ${newEvent.eventName}\n\n` +
+    //           `Regards,\n` +
+    //           `Employee Learning Platform`
+    //       };
+
+    //       // Send notification email to the user
+    //       await transporter.sendMail(mailOptions);
+    //     }
+    //   }
+    // }
+
+
   } catch (error) {
     // If an error occurs, respond with an error message
     console.error('Error saving event details:', error);
@@ -132,6 +163,9 @@ const updateEvent = async (req, res) => {
       return res.status(404).json({ message: 'Event not found' });
     }
 
+    // Respond with the updated event details
+    res.status(200).json({ message: 'Event updated successfully', event: updatedEvent });
+
     // Fetch registrations for the specific event
     const registrations = await RegistrationDetails.find({ event_id: eventId });
 
@@ -163,9 +197,6 @@ const updateEvent = async (req, res) => {
       }
     }
 
-
-    // Respond with the updated event details
-    res.status(200).json({ message: 'Event updated successfully', event: updatedEvent });
   } catch (error) {
     console.error('Error updating event:', error);
     res.status(500).json({ message: 'Failed to update event', error: error.message });

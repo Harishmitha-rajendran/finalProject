@@ -5,6 +5,8 @@ import '../Login/Login.css'
 import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLock } from '@fortawesome/free-solid-svg-icons';
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState('');
@@ -35,24 +37,31 @@ const ResetPassword = () => {
   return (
     <div className='container-bg container-fluid'>
       <form className='form'>
+      <h1>EduVerse</h1>
+      <span className='inputBoxSpan md-flex justify-content-center align-items-center'>
+        <FontAwesomeIcon className='ml-1' icon={faLock} style={{ color: "#19105b" }} />  
         <input 
-          className='inputBox'
+          className='inputBox mx-2'
           type="password" 
           value={newPassword} 
           onChange={(e) => setNewPassword(e.target.value)} 
           placeholder="Enter new password" 
           required 
         />
+      </span>
+      <span className='inputBoxSpan md-flex justify-content-center align-items-center'>
+        <FontAwesomeIcon className='ml-1' icon={faLock} style={{ color: "#19105b" }} />
         <input 
-         className='inputBox'
+         className='inputBox mx-2'
           type="password" 
           value={confirmPassword} 
           onChange={(e) => setConfirmPassword(e.target.value)} 
           placeholder="Confirm password" 
           required 
         />
+      </span>
         <button 
-        className='submitButton'
+        className='submitDiv'
         onClick={(e) => resetPassword(e)}>
         Reset Password
         </button>
