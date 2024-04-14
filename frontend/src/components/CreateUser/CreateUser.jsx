@@ -4,8 +4,12 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Modal, Form, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types'; // Import PropTypes
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const CreateUser = ({ handleClose }) => {
+
+  const[loading,setLoading]=useState(false)
 
   const [userData, setUserData] = useState({
     userName: '',
@@ -28,9 +32,11 @@ const CreateUser = ({ handleClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     try {
         // Send user data to the server to create a new user
         await axios.post('http://localhost:3000/createUser', userData);
+        setLoading(false)
         handleClose();
         toast.success('User created successfully and email sent');
         // Clear the form fields after successful submission
@@ -42,9 +48,11 @@ const CreateUser = ({ handleClose }) => {
         });
     } catch (error) {
         if (error.response && error.response.status === 400 && error.response.data.message === 'User with this email already exists') {
-            toast.error('User with this email already exists');
+          setLoading(false)  
+          toast.error('User with this email already exists');      
         } else {
-            toast.error('Failed to create user. Please try again.');
+            setLoading(false)
+            toast.error('Failed to create user. Please try again.');           
         }
     }
 };
@@ -104,7 +112,12 @@ const CreateUser = ({ handleClose }) => {
             Close
           </Button>
           <Button style={{ backgroundColor: '#FF095C', border: 'none' }} onClick={handleSubmit}>
-            Create 
+{ !loading ?  'Create'   :
+            (  <Box sx={{ display: 'flex' }}>
+                <CircularProgress  color='inherit' size={25}/>
+               </Box> 
+            )
+}            
           </Button>
         </Modal.Footer>
   </Modal>

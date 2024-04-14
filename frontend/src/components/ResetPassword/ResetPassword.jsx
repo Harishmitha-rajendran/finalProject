@@ -7,8 +7,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock } from '@fortawesome/free-solid-svg-icons';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const ResetPassword = () => {
+
+  const [loading,setLoading]=useState(false)
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 //   const [message, setMessage] = useState('');
@@ -22,14 +26,18 @@ const ResetPassword = () => {
 
   const resetPassword = async (e) => {
     e.preventDefault();
+    setLoading(true)
     try {
       if (newPassword !== confirmPassword) {
+        setLoading(true)
         toast.error('Passwords do not match');
         return;
       }
       await axios.post('http://localhost:3000/resetPassword', { email, newPassword });
+      setLoading(false)
       toast.success('Password reset successfull !');
     } catch (error) {
+        setLoading(false)
         toast.error('Failed to reset password. Please try again.');
     }
   };
@@ -63,7 +71,14 @@ const ResetPassword = () => {
         <button 
         className='submitDiv'
         onClick={(e) => resetPassword(e)}>
-        Reset Password
+
+{ !loading ?  'Reset Password'   :
+            (  <Box sx={{ display: 'flex' }}>
+                <CircularProgress  color='inherit' size={25}/>
+               </Box> 
+            )
+}   
+
         </button>
       </form>
       <ToastContainer />

@@ -4,8 +4,12 @@ import './Events.css'
 import { Button, Modal, Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+
 
 function Events() {
+  const [loading,setLoading]=useState(false)
   const [events, setEvents] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editedEvent, setEditedEvent] = useState({});
@@ -74,11 +78,14 @@ function Events() {
   //save edited details
   const handleSaveEdit = async () => {
     try {
+      setLoading(true)
       await axios.put(`http://localhost:3000/events/${editedEvent._id}`, editedEvent);
       setShowEditModal(false);
+      setLoading(false)
       toast.success('Data updated successfully');
       fetchEvents();
     } catch (error) {
+      setLoading(false)
       toast.error('Error saving edited event details');
     }
   };
@@ -365,8 +372,8 @@ useEffect(() => {
             )
             :
             ( <>
-                  <button className={`btn btn-primary w-50 me-2 ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`}  onClick={() => handleRegister(event)}>Register</button>
-                  <button  className={`btn btn-primary w-50  ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`} onClick={() => handleLike(event)}>Like</button>
+                  <button className={`btn btn-primary w-50 me-2 ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`}  onClick={() => handleRegister(event)} style={{backgroundColor:'#FF095C',color:'white'}}>Register</button>
+                  <button  className={`btn btn-primary w-50  ${!(filter==='all' || filter==='upcoming') ? 'disabled-btn' : ''}`} onClick={() => handleLike(event)} style={{backgroundColor:'#FF095C',color:'white'}}>Like</button>
               </>
             )
 }
@@ -497,7 +504,12 @@ useEffect(() => {
             Close
           </Button>
           <Button variant="primary" onClick={handleSaveEdit}>
-            Save
+{ !loading ?  'Update'   :
+            (  <Box sx={{ display: 'flex' }}>
+                <CircularProgress  color='inherit' size={25}/>
+               </Box> 
+            )
+}
           </Button>
         </Modal.Footer>
       </Modal>

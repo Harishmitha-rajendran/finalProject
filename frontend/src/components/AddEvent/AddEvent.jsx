@@ -5,9 +5,12 @@ import { ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import PropTypes from 'prop-types'; // Import PropTypes
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 function AddEvent( { handleClose } ) {
   // const [show, setShow] = useState(false);
+  const [loading,setLoading]=useState(false)
   const [formData, setFormData] = useState({
     eventName: '',
     description: '',
@@ -35,6 +38,8 @@ function AddEvent( { handleClose } ) {
 
   const handleSave = async () => {
 
+    setLoading(true)
+
     const startDate = new Date(formData.startDate);
     const startTime = formData.startTime.split(':'); // Split time into hours and minutes
     const startTimeHours = parseInt(startTime[0]);
@@ -57,27 +62,29 @@ function AddEvent( { handleClose } ) {
 
     // Check if combinedEndDateTime is before combinedStartDateTime
     if (combinedEndDateTime < combinedStartDateTime) {
+      setLoading(false)
       toast.error('End date and time should be after start date and time');
       return; // Don't proceed further if the end date and time are before the start date and time
   }
 
     // Check if combinedStartDateTime is in the past
     if (combinedStartDateTime < currentDate) {
+        setLoading(false)
         toast.error('Please select a future start date and time');
         return; // Don't proceed further if the start date and time are in the past
     }
 
     // Check if combinedEndDateTime is in the past
     if (combinedEndDateTime < currentDate) {
+        setLoading(false)
         toast.error('Please select a future end date and time');
         return; // Don't proceed further if the end date and time are in the past
     }
 
     
- 
-
       try {
         await axios.post('http://localhost:3000/addEvent', formData);
+        setLoading(false)
         handleClose();
         toast.success('Event details saved successfully'); 
         // Clear the form data
@@ -94,6 +101,7 @@ function AddEvent( { handleClose } ) {
 
 
       } catch (error) {
+        setLoading(false)
         console.error('Error saving event details:', error);
         toast.error('Error saving event details'); 
       }
@@ -226,7 +234,12 @@ function AddEvent( { handleClose } ) {
             Close
           </Button>
           <Button onClick={handleSave}>
-            Save
+{ !loading ?  'Add'   :
+            (  <Box sx={{ display: 'flex' }}>
+                <CircularProgress  color='inherit' size={25}/>
+               </Box> 
+            )
+}
           </Button>
         </Modal.Footer>
       </Modal>

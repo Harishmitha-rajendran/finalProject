@@ -8,16 +8,19 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
-import Loader from "react-js-loader";
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [loading,setLoading]=useState(false)
 
   const login = async (e) => {
     e.preventDefault();
+    setLoading(true)
     
     try {
       const response = await axios.post("http://localhost:3000/login", {
@@ -27,13 +30,13 @@ const Login = () => {
       
       if (response.data.success) {
 
+        toast.success(response.data.message);
         const userId= response.data.userId;
 
         // Store user data in localStorage
         localStorage.setItem("userId", JSON.stringify(userId));
-        navigate('/HomePage')
-
-         toast.success(response.data.message);
+        setLoading(false)
+        navigate('/HomePage') 
         
       } else {
         toast.error(response.data.message);
@@ -78,8 +81,16 @@ const Login = () => {
         </span>
 
         <div className='submitDiv d-flex justify-content-center align-items-center'>
-        <button className='submitBtn' type="submit" >Login </button>
-        {/* <Loader type="spinner-default" bgColor='white' color='white' size={25} /> */}
+        <button className='submitBtn text-center' type="submit" >
+        
+{ !loading ?  'Login'   :
+            (  <Box sx={{ display: 'flex' }}>
+                <CircularProgress color='inherit' size={25}/>
+               </Box> 
+            )
+}
+        </button>
+       
         </div>
 
         <span className='fp'  onClick={() => {navigate("/ForgotPassword")}}>Forgot Password ? </span>
