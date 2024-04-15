@@ -6,3 +6,12 @@
     margin: 0  !important;
     padding: 0  !important;
 }
+.custom-toggler.navbar-toggler {
+    border-color: white !important;
+  }
+  
+  .custom-toggler .navbar-toggler-icon {
+    /* background-color: white !important; */
+    color:white;
+  }
+  

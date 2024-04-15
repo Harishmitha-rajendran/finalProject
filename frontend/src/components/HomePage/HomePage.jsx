@@ -61,7 +61,7 @@ function HomePage() {
                 <Navbar expand="lg" className="nav px-4">
                     <Container fluid={true}>
                         <Navbar.Brand style={{color:'white'}} href="#home">EduVerse</Navbar.Brand>
-                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        <Navbar.Toggle className="custom-toggler" aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="m-auto">
                                 <Nav.Link style={{color:'white'}} onClick={() => { showCalenderComponent(false) }}>Home</Nav.Link>
@@ -77,7 +77,7 @@ function HomePage() {
                 <Navbar expand="lg" className="nav px-4">
                     <Container fluid={true}>
                         <Navbar.Brand style={{color:'white'}} href="#home">EduVerse</Navbar.Brand>
-                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        <Navbar.Toggle className="custom-toggler" aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="m-auto">
                             <Nav.Link style={{color:'white'}} onClick={() => { showCalenderComponent(false) }}>Home</Nav.Link>
