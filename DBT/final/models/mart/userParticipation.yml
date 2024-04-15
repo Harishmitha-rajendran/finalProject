@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: userParticipation
+    description: SQL query to calculate the participation percentage for each user based on the number of events they attended compared to the total number of events.
+    columns:
+      - name: userId
+        description: User ID.
+        tests:
+          - not_null
+          - unique
+      - name: participation_percentage
+        description: Participation percentage for each user.
+        tests:
+          - not_null
+          - min:
+              column: participation_percentage
+              value: 0
+          - max:
+              column: participation_percentage
+              value: 100

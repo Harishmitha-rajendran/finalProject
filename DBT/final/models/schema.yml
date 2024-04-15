@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: elp
+    database: finalproject
+    schema: schema
+    tables:
+      - name: userdetails1
+      - name: eventdetails1
+      - name: registrationdetails1
+      - name: interestdetails1

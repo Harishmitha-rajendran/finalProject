@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: popularEvent
+    description: SQL query to count the number of interests for each event and list them in descending order of interest count.
+    columns:
+      - name: eventName
+        description: Name of the event.
+        tests:
+          - not_null
+      - name: interestCount
+        description: Number of interests for each event.
+        tests:
+          - not_null

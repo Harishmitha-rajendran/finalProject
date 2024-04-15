@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: trainerUtilization
+    description: SQL query to calculate the total training time in hours for each trainer based on the events they conducted.
+    columns:
+      - name: trainer
+        description: Name of the trainer.
+        tests:
+          - not_null
+      - name: total_training_time_hours
+        description: Total training time in hours for each trainer.
+        tests:
+          - not_null

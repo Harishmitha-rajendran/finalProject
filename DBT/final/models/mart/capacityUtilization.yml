@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: capacityUtilization
+    description: SQL query to calculate event utilization percentage.
+    columns:
+      - name: eventName
+        description: Name of the event.
+        tests:
+          - not_null
+      - name: openings
+        description: Number of openings for the event.
+        tests:
+          - not_null
+      - name: registrations
+        description: Number of registrations for the event.
+        tests:
+          - not_null
+      - name: capacity_utilization_percentage
+        description: Percentage of event capacity utilized.
+        tests:
+          - not_null

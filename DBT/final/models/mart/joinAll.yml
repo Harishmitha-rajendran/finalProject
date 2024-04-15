@@ -1,0 +1,70 @@
+version: 2
+
+models:
+  - name: joinAll
+    description: SQL query to join multiple tables (event registration, user, and event details) and create a combined dataset.
+    columns:
+      - name: eventId
+        description: Identifier for the event associated with the registration.
+        tests:
+          - not_null
+      - name: userId
+        description: Identifier for the user who registered for the event.
+        tests:
+          - not_null
+      - name: gender
+        description: Gender of the user who registered for the event.
+        tests:
+          - not_null
+      - name: skill
+        description: Skill level of the user who registered for the event.
+        tests:
+          - not_null
+      - name: designation
+        description: Designation of the user.
+        tests:
+          - not_null
+      - name: experience
+        description: Experience level of the user who registered for the event.
+        tests:
+          - not_null
+      - name: eventName
+        description: Name of the event.
+        tests:
+          - not_null
+      - name: description
+        description: Description of the event.
+        tests:
+          - not_null
+      - name: startDate
+        description: Start date of the event.
+        tests:
+          - not_null
+      - name: endDate
+        description: End date of the event.
+        tests:
+          - not_null
+      - name: location
+        description: Location where the event is held.
+        tests:
+          - not_null
+      - name: trainer
+        description: Name of the trainer conducting the event.
+        tests:
+          - not_null
+      - name: openings
+        description: Number of openings available for the event.
+        tests:
+          - not_null
+      - name: registrations
+        description: Number of registrations for the event.
+        tests:
+          - not_null
+      - name: status
+        description: Status of the event. 
+        tests:
+          - not_null
+      - name: nextEvnt
+        description: Suggested next event.
+        tests:
+          - not_null

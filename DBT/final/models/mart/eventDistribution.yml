@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: eventDistribution
+    description: SQL query to calculate event distribution by domain.
+    columns:
+      - name: domain
+        description: Domain or category of events.
+        tests:
+          - not_null
+      - name: totalEvents
+        description: Total number of events in the domain.
+        tests:
+          - not_null
